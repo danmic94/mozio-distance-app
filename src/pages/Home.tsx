@@ -6,8 +6,6 @@ interface HomePageProps {}
 const HomePageComponent: React.FC<HomePageProps> = () => {
   return (
     <Fragment>
-      <span>This is the home page</span>
-      <br/>
       <SearchForm />
     </Fragment>
   );
