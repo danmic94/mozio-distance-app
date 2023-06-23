@@ -21,8 +21,8 @@ import {
 import * as Yup from 'yup';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCity, faRoad, faSpinner, faSquareMinus } from "@fortawesome/free-solid-svg-icons";
-import { AutoComplete, AutoCompleteInput, AutoCompleteItem, AutoCompleteList } from "@choc-ui/chakra-autocomplete";
-import citiesJSON from "../../data/cities.json";
+import SearchableDropDownComponent from "./SearchableDropDown";
+import IntermediateCitiesComponent from "./IntermediateCitiesInputs";
 
 interface SearchFromProps {}
 
@@ -41,7 +41,6 @@ const SearchForm: React.FC<SearchFromProps> = () => {
           if (formik.isValid) {
             //Submit logic here
             console.log(values);
-            
           }
         },
         validationSchema: Yup.object({
@@ -55,19 +54,17 @@ const SearchForm: React.FC<SearchFromProps> = () => {
     const passangersFieldProps = formik.getFieldProps('passangers');
 
     const addIntermediateCityInput = () : void => {
-      console.log('addIntermediateCityInput is clicked');
       let indexNumber: number = intermediateCitiesInputs.size + 1;
       let mapKey: string = `intermediate-cityt-input-${indexNumber}`;
       let newInput: Object = (
-        <FormControl key={mapKey} isInvalid={formik.errors.finalDestination !== undefined}>
+      <FormControl key={mapKey} isInvalid={formik.errors.finalDestination !== undefined}>
         <FormLabel htmlFor="email">Intermediate City</FormLabel>
         <InputGroup>
           <Input
             disabled={isLoading}
             id="finalDestination"
             type="text"
-            placeholder="Type your destination here..."
-            {...finalDestinationFieldProps}
+            placeholder="Type intermediate city here..."
           />
           <InputRightElement
             cursor={'pointer'}
@@ -80,14 +77,6 @@ const SearchForm: React.FC<SearchFromProps> = () => {
       </FormControl>
       );
       setintermediateCitiesInputs(new Map(intermediateCitiesInputs.set(mapKey, newInput)));
-    }
-
-    const renderItermediateCitiesInputs = () => {
-      let inputs: Object[] = [];
-      intermediateCitiesInputs.forEach((inputComponent, key) => {
-        inputs.push(inputComponent);
-      })
-      return inputs;
     }
 
     useEffect(() => {
@@ -107,44 +96,17 @@ const SearchForm: React.FC<SearchFromProps> = () => {
     <Box p={6} rounded="md" w="100%">
       <form onSubmit={(e) => {
         e.preventDefault();
-        formik.handleSubmit()
+        formik.handleSubmit();
       }}>
         {/* <fieldset disabled={isLoading ? "disabled" : ""} > */}
         <VStack spacing={4}>
           {/* Start city destionation input */}
           <FormControl isInvalid={formik.errors.startCity !== undefined}>
-              <FormLabel >Origin city</FormLabel>
-              <AutoComplete
-                openOnFocus
-                restoreOnBlurIfEmpty={false} 
-                onSelectOption={(data) => {formik.setFieldValue('startCity', data.item.value)}} >
-                <AutoCompleteInput
-                    name="startCity"
-                    isInvalid={formik.errors.startCity !== undefined}
-                    aria-errormessage={`${formik.errors.startCity}`}
-                    onBlurCapture={(e) => formik.setFieldValue('startCity', e.target.value)}
-                    onFocusCapture={(e) => formik.setFieldValue('startCity', e.target.value)}
-                    onChange={(e) => formik.setFieldValue('startCity', e.target.value)}
-                    placeholder="Search..."
-                  />
-                  <AutoCompleteList>
-                    {citiesJSON.map((city) => (
-                      <AutoCompleteItem
-                          key={`option-${city[0]}`}
-                          value={`${city[0]}`}
-                          textTransform="capitalize">
-                          {city[0]}
-                      </AutoCompleteItem>
-                    ))}
-                  </AutoCompleteList>
-                </AutoComplete>
-                <FormErrorMessage>{formik.errors.startCity}</FormErrorMessage>
+            <SearchableDropDownComponent formObject={formik} formLabel={'Start city'} fieldName="startCity" hasRightIcon={false} />
           </FormControl>
 
           {/* Render the dynamically added inputs */}
-            <>
-              {renderItermediateCitiesInputs()}
-            </>
+            <IntermediateCitiesComponent inputs={intermediateCitiesInputs} />
           {/* End of the dynamically added inputs or in between cities  */}
 
           {/* Final city destionation input */}
@@ -160,24 +122,34 @@ const SearchForm: React.FC<SearchFromProps> = () => {
               <FormErrorMessage>{formik.errors.finalDestination}</FormErrorMessage>
             </FormControl>
 
-            {/* Passaengers number input section */}
-            <FormControl isInvalid={formik.errors.passangers !== undefined}>
-              <FormLabel htmlFor="passanger">Number of passangers</FormLabel>
-              <NumberInput
-                isInvalid={formik.errors.passangers !== undefined}
-                defaultValue={1} 
-                isRequired={true} 
-                min={1} max={20} 
-                onChange={(val) => { formik.setFieldValue('passangers', val) } }
-                >
-                <NumberInputField {...passangersFieldProps} />
-                <NumberInputStepper>
-                  <NumberIncrementStepper />
-                  <NumberDecrementStepper />
-                </NumberInputStepper>
-              </NumberInput>
-              <FormErrorMessage>{formik.errors.passangers}</FormErrorMessage>
-            </FormControl>
+          {/* Passaengers number input section */}
+          <Stack direction={['column', 'row']} spacing='24px' w="100%">
+            <Box w="20%" >
+              <FormControl isInvalid={formik.errors.passangers !== undefined}>
+                <FormLabel htmlFor="passanger">Number of passangers</FormLabel>
+                <NumberInput
+                  isInvalid={formik.errors.passangers !== undefined}
+                  defaultValue={1} 
+                  isRequired={true} 
+                  min={1} max={20} 
+                  onChange={(val) => { formik.setFieldValue('passangers', val) } }
+                  >
+                  <NumberInputField {...passangersFieldProps} />
+                  <NumberInputStepper>
+                    <NumberIncrementStepper />
+                    <NumberDecrementStepper />
+                  </NumberInputStepper>
+                </NumberInput>
+                <FormErrorMessage>{formik.errors.passangers}</FormErrorMessage>
+              </FormControl>
+            </Box>
+
+            <Box>
+              <h3>Datepicker will be here</h3>
+              {/* DatePicker Here */}
+            </Box>
+
+          </Stack>
             <Button isDisabled={formik.isValid === false} type="submit" colorScheme="teal" width="full">
               Submit  {isLoading && <FontAwesomeIcon icon={faSpinner} spinPulse style={ {marginLeft: '5px'}} />}
             </Button>
