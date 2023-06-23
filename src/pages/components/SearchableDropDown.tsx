@@ -18,7 +18,7 @@ const SearchableDropDownComponent: React.FC<SearchableDropDownProps> = props => 
 
     return (
         <Fragment>
-            <FormLabel>{formLabel}</FormLabel>
+            <FormLabel htmlFor={fieldName}>{formLabel}</FormLabel>
             <AutoComplete
                 openOnFocus
                 restoreOnBlurIfEmpty={false}
@@ -27,18 +27,18 @@ const SearchableDropDownComponent: React.FC<SearchableDropDownProps> = props => 
                 }}>
                 <InputGroup>
                     <AutoCompleteInput
-                        name='startCity'
+                        name={fieldName}
                         isInvalid={formObject.errors[`${fieldName}`] !== undefined}
                         onBlurCapture={e => formObject.setFieldValue(fieldName, e.target.value)}
                         onFocusCapture={e => formObject.setFieldValue(fieldName, e.target.value)}
                         onChange={e => formObject.setFieldValue(fieldName, e.target.value)}
-                        placeholder='Search...'
+                        placeholder='Search for a city...'
                     />
                     {hasRightIcon && (
                         <InputRightElement
                             cursor={'pointer'}
                             onClick={e => typeof iconClickHandler === 'function' && iconClickHandler(e)}
-                            children={rightIcon} //<FontAwesomeIcon icon={faSquareMinus} />
+                            children={rightIcon}
                             {...{ 'intermediate-city-id': `${inputIdentifier}` }}
                         />
                     )}
