@@ -7,13 +7,13 @@ Interview task that involves the haversine formulan and a React App
 - [ ] Home page component :house:
   - [ ] A form with an origin and destination searchable dropdowns;
   - [ ] Ability to add itermediaate cities in between origin and destination;
-  - [ ] Origin and destination cities are required to be filled in;
-  - [ ] Home page should initiate with no in-between cities;
+  - [X] Origin and destination cities are required to be filled in;
+  - [X] Home page should initiate with no in-between cities;
   - [ ] Once in between cities are added they are required to be filled;
   - [ ] The search of cities should be ASYNC and there should be a UI loading spinner;
   - [ ] There should be a date of the trip form field **with date to be in future validation and required**;
   - [ ] Passagers field with **number validation and required** (number input wiht mask maybe?)
-  - [ ] Form should display for each field the propper error message and highlight the in error field;
+  - [X] Form should display for each field the propper error message and highlight the in error field;
   - [ ] If the form is invalid diasble the submit button;
   - [ ] Submit should redirect to the search result page (react-router involvement);
   - [ ] The URL from the Home page should carry on the form data as query string so it can have sharebale links;
@@ -26,7 +26,7 @@ Interview task that involves the haversine formulan and a React App
 
 ## Technical Requirements
 
-- [ ] Use React with TypeScript
+- [X] Use React with TypeScript
 - [ ] Two Mock endpoints simulating ASYNC functionality for the cities search and Haversine formula;
 - [ ] The first endpoint receives a keyword and returns a list of cities that match the keyword;
 - [ ] The second endpoint receives a list of cities and calculates the distances.
