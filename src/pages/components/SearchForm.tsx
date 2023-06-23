@@ -7,7 +7,6 @@ import {
     FormErrorMessage,
     FormLabel,
     Heading,
-    Input,
     NumberDecrementStepper,
     NumberIncrementStepper,
     NumberInput,
@@ -48,7 +47,6 @@ const SearchForm: React.FC<SearchFromProps> = () => {
         }),
     });
 
-    const finalDestinationFieldProps = formik.getFieldProps('finalDestination');
     const passangersFieldProps = formik.getFieldProps('passangers');
 
     useEffect(() => {
@@ -104,15 +102,12 @@ const SearchForm: React.FC<SearchFromProps> = () => {
 
                         {/* Final city destionation input */}
                         <FormControl isInvalid={formik.errors.finalDestination !== undefined}>
-                            <FormLabel htmlFor='email'>Final Destination</FormLabel>
-                            <Input
-                                disabled={isLoading}
-                                id='finalDestination'
-                                type='text'
-                                placeholder='Type your destination here...'
-                                {...finalDestinationFieldProps}
+                            <SearchableDropDownComponent
+                                formObject={formik}
+                                formLabel={'Destination'}
+                                fieldName='finalDestination'
+                                hasRightIcon={false}
                             />
-                            <FormErrorMessage>{formik.errors.finalDestination}</FormErrorMessage>
                         </FormControl>
 
                         {/* Passaengers number input section */}
