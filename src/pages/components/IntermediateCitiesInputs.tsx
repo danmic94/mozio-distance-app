@@ -28,7 +28,7 @@ const IntermediateCitiesComponent: React.FC<IntermediateCitiesProps> = props => 
         let uniqueId: string = Math.floor(Math.random() * Date.now()).toString(16);
         let mapKey: string = `intermediate-city-id-${uniqueId}`;
         let newInput: Object = (
-            <FormControl key={mapKey} isInvalid={formObject.errors.finalDestination !== undefined}>
+            <FormControl key={mapKey}>
                 <SearchableDropDownComponent
                     formObject={formObject}
                     formLabel={'Intermediate city'}

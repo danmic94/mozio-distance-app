@@ -28,7 +28,7 @@ const SearchableDropDownComponent: React.FC<SearchableDropDownProps> = props => 
                 <InputGroup>
                     <AutoCompleteInput
                         name={fieldName}
-                        isInvalid={formObject.errors[`${fieldName}`] !== undefined}
+                        isInvalid={formObject.errors[fieldName] !== undefined}
                         onBlurCapture={e => formObject.setFieldValue(fieldName, e.target.value)}
                         onFocusCapture={e => formObject.setFieldValue(fieldName, e.target.value)}
                         onChange={e => formObject.setFieldValue(fieldName, e.target.value)}
@@ -51,7 +51,7 @@ const SearchableDropDownComponent: React.FC<SearchableDropDownProps> = props => 
                     ))}
                 </AutoCompleteList>
             </AutoComplete>
-            <FormErrorMessage>{formObject.errors[`${fieldName}`]}</FormErrorMessage>
+            <FormErrorMessage>{formObject.errors[fieldName]}</FormErrorMessage>
         </Fragment>
     );
 };
