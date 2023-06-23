@@ -1,70 +1,59 @@
-import React, { Fragment } from "react";
-import { FormErrorMessage, FormLabel, InputGroup, InputRightElement } from "@chakra-ui/react";
-import { AutoComplete, AutoCompleteInput, AutoCompleteItem, AutoCompleteList } from "@choc-ui/chakra-autocomplete";
-import citiesJSON from "../../data/cities.json";
+import React, { Fragment } from 'react';
+import { FormErrorMessage, FormLabel, InputGroup, InputRightElement } from '@chakra-ui/react';
+import { AutoComplete, AutoCompleteInput, AutoCompleteItem, AutoCompleteList } from '@choc-ui/chakra-autocomplete';
+import citiesJSON from '../../data/cities.json';
 
 interface SearchableDropDownProps {
-    formObject: any,
-    fieldName: string,
-    formLabel: string|null,
-    hasRightIcon: boolean,
-    rightIcon?: any,
-    iconClickHandler?: Function,
-    inputIdentifier?: number|string
+    formObject: any;
+    fieldName: string;
+    formLabel: string | null;
+    hasRightIcon: boolean;
+    rightIcon?: any;
+    iconClickHandler?: Function;
+    inputIdentifier?: number | string;
 }
 
-const SearchableDropDownComponent: React.FC<SearchableDropDownProps> = (props) => {
+const SearchableDropDownComponent: React.FC<SearchableDropDownProps> = props => {
+    const { formObject, fieldName, formLabel, hasRightIcon, rightIcon, iconClickHandler, inputIdentifier } = props;
 
-    const { 
-      formObject,
-      fieldName,
-      formLabel,
-      hasRightIcon,
-      rightIcon,
-      iconClickHandler,
-      inputIdentifier 
-    } = props;
-
-  return (
-    <Fragment>
-        <FormLabel >{formLabel}</FormLabel>
-        <AutoComplete
-            openOnFocus
-            restoreOnBlurIfEmpty={false} 
-            onSelectOption={(data) => {formObject.setFieldValue(fieldName, data.item.value)}} >
-              <InputGroup>
-                <AutoCompleteInput
-                    name="startCity"
-                    isInvalid={formObject.errors[`${fieldName}`] !== undefined}
-                    onBlurCapture={(e) => formObject.setFieldValue(fieldName, e.target.value)}
-                    onFocusCapture={(e) => formObject.setFieldValue(fieldName, e.target.value)}
-                    onChange={(e) => formObject.setFieldValue(fieldName, e.target.value)}
-                    placeholder="Search..."
-                  />
-                  {hasRightIcon && (
-                    <InputRightElement
-                      cursor={'pointer'}
-                      onClick={(e) => typeof iconClickHandler === 'function' && iconClickHandler(e)}
-                      children={rightIcon}//<FontAwesomeIcon icon={faSquareMinus} />
-                      {...{ "intermediate-city-id": `${inputIdentifier}` }}
-                            />
-                  )}
-                  
-              </InputGroup>
-                  <AutoCompleteList>
-                    {citiesJSON.map((city) => (
-                      <AutoCompleteItem
-                          key={`option-${city[0]}`}
-                          value={`${city[0]}`}
-                          textTransform="capitalize">
-                          {city[0]}
-                      </AutoCompleteItem>
+    return (
+        <Fragment>
+            <FormLabel>{formLabel}</FormLabel>
+            <AutoComplete
+                openOnFocus
+                restoreOnBlurIfEmpty={false}
+                onSelectOption={data => {
+                    formObject.setFieldValue(fieldName, data.item.value);
+                }}>
+                <InputGroup>
+                    <AutoCompleteInput
+                        name='startCity'
+                        isInvalid={formObject.errors[`${fieldName}`] !== undefined}
+                        onBlurCapture={e => formObject.setFieldValue(fieldName, e.target.value)}
+                        onFocusCapture={e => formObject.setFieldValue(fieldName, e.target.value)}
+                        onChange={e => formObject.setFieldValue(fieldName, e.target.value)}
+                        placeholder='Search...'
+                    />
+                    {hasRightIcon && (
+                        <InputRightElement
+                            cursor={'pointer'}
+                            onClick={e => typeof iconClickHandler === 'function' && iconClickHandler(e)}
+                            children={rightIcon} //<FontAwesomeIcon icon={faSquareMinus} />
+                            {...{ 'intermediate-city-id': `${inputIdentifier}` }}
+                        />
+                    )}
+                </InputGroup>
+                <AutoCompleteList>
+                    {citiesJSON.map(city => (
+                        <AutoCompleteItem key={`option-${city[0]}`} value={`${city[0]}`} textTransform='capitalize'>
+                            {city[0]}
+                        </AutoCompleteItem>
                     ))}
-                  </AutoCompleteList>
-                </AutoComplete>
-                <FormErrorMessage>{formObject.errors[`${fieldName}`]}</FormErrorMessage>
-    </Fragment>
-  );
+                </AutoCompleteList>
+            </AutoComplete>
+            <FormErrorMessage>{formObject.errors[`${fieldName}`]}</FormErrorMessage>
+        </Fragment>
+    );
 };
 
 export default SearchableDropDownComponent;
