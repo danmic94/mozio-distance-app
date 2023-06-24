@@ -1,4 +1,4 @@
-import React, { Fragment, useState } from 'react';
+import React, { Fragment, useEffect, useState } from 'react';
 import { FormErrorMessage, FormLabel, InputGroup, InputLeftElement, InputRightElement, Spinner } from '@chakra-ui/react';
 import { AutoComplete, AutoCompleteInput, AutoCompleteItem, AutoCompleteList } from '@choc-ui/chakra-autocomplete';
 import { searchCity } from '../../helpers/endpoints';
@@ -11,10 +11,12 @@ interface SearchableDropDownProps {
     rightIcon?: any;
     iconClickHandler?: Function;
     inputIdentifier?: number | string;
+    isInvalid: boolean;
+    errorMessage?: string | null;
 }
 
 const SearchableDropDownComponent: React.FC<SearchableDropDownProps> = props => {
-    const { formObject, fieldName, formLabel, hasRightIcon, rightIcon, iconClickHandler, inputIdentifier } = props;
+    const { formObject, fieldName, formLabel, hasRightIcon, rightIcon, iconClickHandler, inputIdentifier, isInvalid, errorMessage } = props;
     const [citiesList, setcitiesList] = useState<[][]>([]);
     const [inputIsLoading, setinputIsLoading] = useState<boolean>(false);
 
@@ -31,6 +33,12 @@ const SearchableDropDownComponent: React.FC<SearchableDropDownProps> = props => 
         );
     };
 
+    useEffect(() => {
+        if (fieldName.includes('intermediate')) {
+            console.log('SearchableDropDownComponent', formObject.values, fieldName, formObject.errors[fieldName]);
+        }
+    }, [formObject.values]);
+
     return (
         <Fragment>
             <FormLabel htmlFor={fieldName}>{formLabel}</FormLabel>
@@ -43,7 +51,7 @@ const SearchableDropDownComponent: React.FC<SearchableDropDownProps> = props => 
                 <InputGroup>
                     <AutoCompleteInput
                         name={fieldName}
-                        isInvalid={formObject.errors[fieldName] !== undefined}
+                        isInvalid={isInvalid}
                         onBlurCapture={e => formObject.setFieldValue(fieldName, e.target.value)}
                         onFocusCapture={e => formObject.setFieldValue(fieldName, e.target.value)}
                         onChange={e => {
@@ -76,7 +84,7 @@ const SearchableDropDownComponent: React.FC<SearchableDropDownProps> = props => 
                     </AutoCompleteList>
                 )}
             </AutoComplete>
-            <FormErrorMessage>{formObject.errors[fieldName]}</FormErrorMessage>
+            {isInvalid && <FormErrorMessage>{errorMessage}</FormErrorMessage>}
         </Fragment>
     );
 };

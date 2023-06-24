@@ -27,36 +27,29 @@ const SearchForm: React.FC<SearchFromProps> = () => {
     const isLoading: boolean = false;
     const addIntermediateCityButtonRef = useRef<any>(null);
     const [intermediateCitiesInputs, setintermediateCitiesInputs] = useState<Map<string, Object>>(new Map());
+    const [formValues, setformValues] = useState({
+        startCity: '',
+        finalDestination: '',
+        passangers: 1,
+    });
+    const [formValidators, setformValidators] = useState({
+        startCity: Yup.string().required('Required'),
+        finalDestination: Yup.string().required('Required'),
+        passangers: Yup.number().integer().min(1, 'Must have at least one passanger!').required('Required'),
+    });
 
     const formik = useFormik({
-        initialValues: {
-            startCity: '',
-            finalDestination: '',
-            passangers: 0,
-        },
+        initialValues: formValues,
         onSubmit: values => {
             if (formik.isValid) {
                 //Submit logic here
                 console.log(values);
             }
         },
-        validationSchema: Yup.object({
-            startCity: Yup.string().required('Required'),
-            finalDestination: Yup.string().required('Required'),
-            passangers: Yup.number().required('Required'),
-        }),
+        validationSchema: Yup.object(formValidators),
     });
 
     const passangersFieldProps = formik.getFieldProps('passangers');
-
-    // useEffect(() => {
-    //     //on the changed size of the inputs add validations in the formik object
-    //     console.log(formik);
-
-    //     intermediateCitiesInputs.forEach((inputComponent: any) => {
-    //         const inputName: string = inputComponent.props.children.props.fieldName;
-    //     });
-    // }, [intermediateCitiesInputs, intermediateCitiesInputs.size]);
 
     return (
         <VStack w='1024px' p={32} alignItems='flex-start'>
@@ -87,6 +80,8 @@ const SearchForm: React.FC<SearchFromProps> = () => {
                                 formLabel={'Start city'}
                                 fieldName='startCity'
                                 hasRightIcon={false}
+                                isInvalid={formik.errors.startCity !== undefined}
+                                errorMessage={formik.errors.startCity}
                             />
                         </FormControl>
 
@@ -96,6 +91,10 @@ const SearchForm: React.FC<SearchFromProps> = () => {
                             inputs={intermediateCitiesInputs}
                             setInputs={setintermediateCitiesInputs}
                             formObject={formik}
+                            setInputsValidation={setformValidators}
+                            formValidationObject={formValidators}
+                            formValues={formValues}
+                            setFormValues={setformValues}
                         />
                         {/* End of the dynamically added inputs or in between cities  */}
 
@@ -106,6 +105,8 @@ const SearchForm: React.FC<SearchFromProps> = () => {
                                 formLabel={'Destination'}
                                 fieldName='finalDestination'
                                 hasRightIcon={false}
+                                isInvalid={formik.errors.startCity !== undefined}
+                                errorMessage={formik.errors.startCity}
                             />
                         </FormControl>
 
