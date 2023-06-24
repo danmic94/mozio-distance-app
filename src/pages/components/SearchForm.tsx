@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { useFormik } from 'formik';
 import {
     Box,
@@ -56,9 +56,6 @@ const SearchForm: React.FC<SearchFromProps> = () => {
     });
 
     const passangersFieldProps = formik.getFieldProps('passangers');
-    useEffect(() => {
-        console.log(formik.values, formik.errors);
-    }, [formik.errors]);
 
     return (
         <VStack w='1024px' p={32} alignItems='flex-start'>

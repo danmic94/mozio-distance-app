@@ -21,50 +21,38 @@ const IntermediateCitiesComponent: React.FC<IntermediateCitiesProps> = props => 
     const { inputs, setInputs, formObject, addInputButtonRef, setInputsValidation, formValidationObject, formValues, setFormValues } =
         props;
 
-    useEffect(() => {
-        const addIntermediateCityInput = (): void => {
-            let uniqueId: string = Math.floor(Math.random() * Date.now()).toString(16);
-            let mapKey: string = `intermediate-city-id-${uniqueId}`;
+    /**
+     * Manage state loigc of parent component keeping track of
+     * form values and validators plus the react component
+     * of the input itself
+     *
+     * @param newInput
+     * @param mapKey
+     */
+    const createInput = (newInput: Object, mapKey: string): void => {
+        //Setting up validations
+        const updatedValidations = { ...formValidationObject };
+        updatedValidations[mapKey] = Yup.string().required('Required');
+        setInputsValidation(updatedValidations);
 
-            //Setting up validations
-            const updatedValidations = { ...formValidationObject };
-            updatedValidations[mapKey] = Yup.string().required('Required');
-            setInputsValidation(updatedValidations);
+        //Add values to form
+        const updatedFormValues = { ...formValues };
+        updatedFormValues[mapKey] = '';
+        setFormValues(updatedFormValues);
+        formObject.validateForm();
 
-            //Add values to form
-            const updatedFormValues = { ...formValues };
-            updatedFormValues[mapKey] = '';
-            setFormValues(updatedFormValues);
-            formObject.validateForm();
+        // Adding the new input in the parent state map object
+        setInputs((oldValues: any) => {
+            return new Map(oldValues.set(mapKey, newInput));
+        });
+    };
 
-            let newInput: Object = (
-                <FormControl key={mapKey} isInvalid={formObject.errors[mapKey] !== undefined}>
-                    <SearchableDropDownComponent
-                        formObject={formObject}
-                        formLabel={'Intermediate city'}
-                        fieldName={mapKey}
-                        hasRightIcon={true}
-                        rightIcon={<FontAwesomeIcon icon={faSquareMinus} />}
-                        inputIdentifier={uniqueId}
-                        iconClickHandler={removeIntermediateCityInput}
-                        isInvalid={formObject.errors[mapKey] !== undefined}
-                        errorMessage={formObject.errors[mapKey]}
-                    />
-                </FormControl>
-            );
-            setInputs((oldValues: any) => {
-                return new Map(oldValues.set(mapKey, newInput));
-            });
-        };
-
-        const buttonRef = addInputButtonRef;
-        buttonRef.current.addEventListener('click', addIntermediateCityInput);
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-        return () => {
-            buttonRef.current.removeEventListener('click', addIntermediateCityInput);
-        };
-    }, []);
-
+    /**
+     * Opposite of the createInput cleans up the parent state
+     * of all refrencaes to the created intermediate inpu
+     *
+     * @param e
+     */
     const removeIntermediateCityInput = (e: React.MouseEvent): void => {
         const inputIdentifier =
             'intermediate-city-id-' + ((e.currentTarget as HTMLInputElement).getAttribute('intermediate-city-id') as string);
@@ -82,6 +70,38 @@ const IntermediateCitiesComponent: React.FC<IntermediateCitiesProps> = props => 
         delete updatedFormValues[inputIdentifier];
         setFormValues(updatedFormValues);
     };
+
+    useEffect(() => {
+        const addIntermediateCityInput = (): void => {
+            let uniqueId: string = Math.floor(Math.random() * Date.now()).toString(16);
+            let mapKey: string = `intermediate-city-id-${uniqueId}`;
+
+            let newInput: Object = (
+                <FormControl key={mapKey} isInvalid={formObject.errors[mapKey] !== undefined}>
+                    <SearchableDropDownComponent
+                        formObject={formObject}
+                        formLabel={'Intermediate city'}
+                        fieldName={mapKey}
+                        hasRightIcon={true}
+                        rightIcon={<FontAwesomeIcon icon={faSquareMinus} />}
+                        inputIdentifier={uniqueId}
+                        iconClickHandler={removeIntermediateCityInput}
+                        isInvalid={formObject.errors[mapKey] !== undefined}
+                        errorMessage={formObject.errors[mapKey]}
+                    />
+                </FormControl>
+            );
+
+            createInput(newInput, mapKey);
+        };
+
+        const buttonRef = addInputButtonRef;
+        buttonRef.current.addEventListener('click', addIntermediateCityInput);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+        return () => {
+            buttonRef.current.removeEventListener('click', addIntermediateCityInput);
+        };
+    }, []);
 
     const renderItermediateCitiesInputs = () => {
         let toRenderInputs: ReactNode[] = [];
