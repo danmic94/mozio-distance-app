@@ -1,7 +1,7 @@
-import React, { Fragment } from 'react';
-import { FormErrorMessage, FormLabel, InputGroup, InputRightElement } from '@chakra-ui/react';
+import React, { Fragment, useState } from 'react';
+import { FormErrorMessage, FormLabel, InputGroup, InputLeftElement, InputRightElement, Spinner } from '@chakra-ui/react';
 import { AutoComplete, AutoCompleteInput, AutoCompleteItem, AutoCompleteList } from '@choc-ui/chakra-autocomplete';
-import citiesJSON from '../../data/cities.json';
+import { searchCity } from '../../helpers/endpoints';
 
 interface SearchableDropDownProps {
     formObject: any;
@@ -15,6 +15,21 @@ interface SearchableDropDownProps {
 
 const SearchableDropDownComponent: React.FC<SearchableDropDownProps> = props => {
     const { formObject, fieldName, formLabel, hasRightIcon, rightIcon, iconClickHandler, inputIdentifier } = props;
+    const [citiesList, setcitiesList] = useState<[][]>([]);
+    const [inputIsLoading, setinputIsLoading] = useState<boolean>(false);
+
+    const handleDordownSearch = (searchTermn: string) => {
+        searchCity(searchTermn).then(
+            (citiesResults: []) => {
+                setcitiesList(citiesResults);
+                setinputIsLoading(false);
+            },
+            () => {
+                console.log('failure here');
+                setinputIsLoading(false);
+            },
+        );
+    };
 
     return (
         <Fragment>
@@ -31,7 +46,14 @@ const SearchableDropDownComponent: React.FC<SearchableDropDownProps> = props => 
                         isInvalid={formObject.errors[fieldName] !== undefined}
                         onBlurCapture={e => formObject.setFieldValue(fieldName, e.target.value)}
                         onFocusCapture={e => formObject.setFieldValue(fieldName, e.target.value)}
-                        onChange={e => formObject.setFieldValue(fieldName, e.target.value)}
+                        onChange={e => {
+                            const value = e.target.value;
+                            formObject.setFieldValue(fieldName, e.target.value);
+                            if (value !== '' && value.length > 0) {
+                                setinputIsLoading(true);
+                                handleDordownSearch(value.trim());
+                            }
+                        }}
                         placeholder='Search for a city...'
                     />
                     {hasRightIcon && (
@@ -42,14 +64,17 @@ const SearchableDropDownComponent: React.FC<SearchableDropDownProps> = props => 
                             {...{ 'intermediate-city-id': `${inputIdentifier}` }}
                         />
                     )}
+                    {inputIsLoading && <InputLeftElement children={<Spinner color='red.500' />} />}
                 </InputGroup>
-                <AutoCompleteList>
-                    {citiesJSON.map(city => (
-                        <AutoCompleteItem key={`option-${city[0]}`} value={`${city[0]}`} textTransform='capitalize'>
-                            {city[0]}
-                        </AutoCompleteItem>
-                    ))}
-                </AutoCompleteList>
+                {citiesList && (
+                    <AutoCompleteList>
+                        {citiesList.map((city: any) => (
+                            <AutoCompleteItem key={`option-${city[0]}`} value={`${city[0]}`} textTransform='capitalize'>
+                                {city[0]}
+                            </AutoCompleteItem>
+                        ))}
+                    </AutoCompleteList>
+                )}
             </AutoComplete>
             <FormErrorMessage>{formObject.errors[fieldName]}</FormErrorMessage>
         </Fragment>

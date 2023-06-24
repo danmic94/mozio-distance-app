@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { useFormik } from 'formik';
 import {
     Box,
@@ -49,20 +49,19 @@ const SearchForm: React.FC<SearchFromProps> = () => {
 
     const passangersFieldProps = formik.getFieldProps('passangers');
 
-    useEffect(() => {
-        //on the changed size of the inputs add validations in the formik object
-        console.log(formik);
+    // useEffect(() => {
+    //     //on the changed size of the inputs add validations in the formik object
+    //     console.log(formik);
 
-        intermediateCitiesInputs.forEach((inputComponent: any) => {
-            const inputName: string = inputComponent.props.children.props.fieldName;
-        });
-    }, [intermediateCitiesInputs, intermediateCitiesInputs.size]);
+    //     intermediateCitiesInputs.forEach((inputComponent: any) => {
+    //         const inputName: string = inputComponent.props.children.props.fieldName;
+    //     });
+    // }, [intermediateCitiesInputs, intermediateCitiesInputs.size]);
 
     return (
         <VStack w='1024px' p={32} alignItems='flex-start'>
             <Heading as='h1' id='contactme-section'>
-                <FontAwesomeIcon icon={faRoad} />
-                Find out how many km will take...
+                <FontAwesomeIcon icon={faRoad} /> Find out how many km will take...
             </Heading>
             <Stack direction='row' spacing={4}>
                 <Button
