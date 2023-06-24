@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useFormik } from 'formik';
 import {
     Box,
@@ -20,10 +20,12 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCity, faRoad, faSpinner } from '@fortawesome/free-solid-svg-icons';
 import SearchableDropDownComponent from './SearchableDropDown';
 import IntermediateCitiesComponent from './IntermediateCitiesInputs';
+import { SingleDatepicker } from 'chakra-dayzed-datepicker';
 
 interface SearchFromProps {}
 
 const SearchForm: React.FC<SearchFromProps> = () => {
+    const today = new Date();
     const isLoading: boolean = false;
     const addIntermediateCityButtonRef = useRef<any>(null);
     const [intermediateCitiesInputs, setintermediateCitiesInputs] = useState<Map<string, Object>>(new Map());
@@ -31,12 +33,16 @@ const SearchForm: React.FC<SearchFromProps> = () => {
         startCity: '',
         finalDestination: '',
         passangers: 1,
+        departureDate: today,
     });
     const [formValidators, setformValidators] = useState({
         startCity: Yup.string().required('Required'),
         finalDestination: Yup.string().required('Required'),
         passangers: Yup.number().integer().min(1, 'Must have at least one passanger!').required('Required'),
+        departureDate: Yup.date().required('Required').typeError('Please enter a valid date!').min(today, 'Date is in the past!'),
     });
+
+    const [date, setDate] = useState(new Date());
 
     const formik = useFormik({
         initialValues: formValues,
@@ -50,6 +56,9 @@ const SearchForm: React.FC<SearchFromProps> = () => {
     });
 
     const passangersFieldProps = formik.getFieldProps('passangers');
+    useEffect(() => {
+        console.log(formik.values, formik.errors);
+    }, [formik.errors]);
 
     return (
         <VStack w='1024px' p={32} alignItems='flex-start'>
@@ -114,7 +123,7 @@ const SearchForm: React.FC<SearchFromProps> = () => {
                         <Stack direction={['column', 'row']} spacing='24px' w='100%'>
                             <Box w='20%'>
                                 <FormControl isInvalid={formik.errors.passangers !== undefined}>
-                                    <FormLabel htmlFor='passanger'>Number of passangers</FormLabel>
+                                    <FormLabel htmlFor='passanger'>Passangers</FormLabel>
                                     <NumberInput
                                         isInvalid={formik.errors.passangers !== undefined}
                                         defaultValue={1}
@@ -134,9 +143,13 @@ const SearchForm: React.FC<SearchFromProps> = () => {
                                 </FormControl>
                             </Box>
 
-                            <Box>
-                                <h3>Datepicker will be here</h3>
+                            <Box w='20%'>
                                 {/* DatePicker Here */}
+                                <FormControl isInvalid={formik.errors.departureDate !== undefined}>
+                                    <FormLabel htmlFor='departureDate'>Day of travel</FormLabel>
+                                    <SingleDatepicker name='departureDate' date={date} onDateChange={setDate} />
+                                    {/* <FormErrorMessage>{formik.errors.departureDate}</FormErrorMessage> */}
+                                </FormControl>
                             </Box>
                         </Stack>
                         <Button isDisabled={formik.isValid === false} type='submit' colorScheme='teal' width='full'>

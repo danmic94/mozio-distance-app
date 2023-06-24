@@ -33,12 +33,6 @@ const SearchableDropDownComponent: React.FC<SearchableDropDownProps> = props => 
         );
     };
 
-    useEffect(() => {
-        if (fieldName.includes('intermediate')) {
-            console.log('SearchableDropDownComponent', formObject.values, fieldName, formObject.errors[fieldName]);
-        }
-    }, [formObject.values]);
-
     return (
         <Fragment>
             <FormLabel htmlFor={fieldName}>{formLabel}</FormLabel>
