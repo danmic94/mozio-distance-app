@@ -1,4 +1,5 @@
 import citiesJSON from '../data/cities.json';
+import haversineDistance from './haversine';
 
 /**
  * Returns a random integer between min (inclusive) and max (inclusive).
@@ -51,4 +52,32 @@ const searchCity = (searchTermn: string): Promise<[]> => {
     });
 };
 
-export { searchCity };
+const calculateDistanceBetweenCities = (cities: [][]): Promise<number> => {
+    return new Promise((resolve: Function, reject: Function) => {
+        setTimeout(() => {
+            let failFlag = false;
+            //Reject the promise if dijon is in the cities
+            cities.forEach((city: any) => {
+                if (city[0] === 'Dijon') {
+                    failFlag = true;
+                    return;
+                }
+            });
+            if (failFlag) {
+                return reject('Failed on purpose');
+            }
+            // const result = { total: 0 };
+            if (cities.length === 2) {
+                console.log('Simpli apply haversineDistance function and return the result');
+            }
+
+            if (cities.length > 2) {
+                console.log('Must loop through cities and create a more advanced oject');
+            }
+
+            return resolve();
+        }, getRandomInt(0, 1000));
+    });
+};
+
+export { searchCity, calculateDistanceBetweenCities };
