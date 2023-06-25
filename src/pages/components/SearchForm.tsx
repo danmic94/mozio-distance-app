@@ -29,6 +29,7 @@ interface SearchFromProps {
     total?: number;
     isLoading: boolean;
     setLoader: Function;
+    setShowError: Function;
 }
 
 interface CityData {
@@ -38,7 +39,7 @@ interface CityData {
 }
 
 const SearchForm: React.FC<SearchFromProps> = props => {
-    const { setTotalDistnceResult, isLoading, setLoader } = props;
+    const { setTotalDistnceResult, isLoading, setLoader, setShowError } = props;
     const today = new Date();
     const navigate = useNavigate();
     const location = useLocation();
@@ -81,11 +82,13 @@ const SearchForm: React.FC<SearchFromProps> = props => {
                         reject => {
                             console.log('reject', reject);
                             setLoader(false);
+                            setShowError(true);
                         },
                     )
                     .catch(err => {
                         console.log('This error is thrown when calcualtion goes bad', err);
                         setLoader(false);
+                        setShowError(true);
                     });
                 if (location.pathname.includes('search') === false) {
                     navigate('/search');
