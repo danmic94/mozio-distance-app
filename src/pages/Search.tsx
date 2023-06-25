@@ -18,8 +18,7 @@ const SearchPageComponent: React.FC<SearchPageProps> = () => {
                 <Heading as='h1' id='contactme-section'>
                     <FontAwesomeIcon icon={faRoad} /> Find out how many km will take...
                     <br />
-                    {isLoading && <Spinner color='teal.500' />}
-                    <Text textAlign={'left'}>{calculationsResultContext.total} KM</Text>
+                    {isLoading ? <Spinner color='teal.500' /> : <Text textAlign={'left'}>{calculationsResultContext.total} KM</Text>}
                 </Heading>
                 <SearchForm setTotalDistnceResult={calculationsResultContext.setTotal} isLoading={isLoading} setLoader={setLoader} />
             </VStack>

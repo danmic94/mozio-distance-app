@@ -54,7 +54,7 @@ const SearchForm: React.FC<SearchFromProps> = props => {
         startCity: Yup.string().required('Required'),
         finalDestination: Yup.string().required('Required'),
         passangers: Yup.number().integer().min(1, 'Must have at least one passanger!').required('Required'),
-        departureDate: Yup.date().required('Required').typeError('Please enter a valid date!').min(today, 'Date is in the past!'),
+        departureDate: Yup.date().min(today, 'Date is in the past!').required('Required!'),
     });
 
     const [date, setDate] = useState(new Date());
@@ -96,6 +96,9 @@ const SearchForm: React.FC<SearchFromProps> = props => {
     });
 
     const passangersFieldProps = formik.getFieldProps('passangers');
+    const departureDateFieldProps = formik.getFieldProps('departureDate');
+
+    console.log(formik.errors);
 
     return (
         <Fragment>
@@ -183,8 +186,18 @@ const SearchForm: React.FC<SearchFromProps> = props => {
                                 {/* DatePicker Here */}
                                 <FormControl isInvalid={formik.errors.departureDate !== undefined}>
                                     <FormLabel htmlFor='departureDate'>Day of travel</FormLabel>
-                                    <SingleDatepicker name='departureDate' date={date} onDateChange={setDate} />
-                                    {/* <FormErrorMessage>{formik.errors.departureDate}</FormErrorMessage> */}
+                                    <SingleDatepicker
+                                        date={date}
+                                        onDateChange={e => {
+                                            console.log(e);
+                                            setDate(e);
+                                        }}
+                                        {...departureDateFieldProps}
+                                        minDate={today}
+                                    />
+                                    {formik?.errors?.departureDate ? (
+                                        <FormErrorMessage>{formik.errors.departureDate as string}</FormErrorMessage>
+                                    ) : null}
                                 </FormControl>
                             </Box>
                         </Stack>
