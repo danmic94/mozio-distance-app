@@ -27,6 +27,8 @@ import CalculateDistanceResponse from '../../data/types';
 interface SearchFromProps {
     setTotalDistnceResult?: Function;
     total?: number;
+    isLoading: boolean;
+    setLoader: Function;
 }
 
 interface CityData {
@@ -36,9 +38,8 @@ interface CityData {
 }
 
 const SearchForm: React.FC<SearchFromProps> = props => {
-    const { setTotalDistnceResult } = props;
+    const { setTotalDistnceResult, isLoading, setLoader } = props;
     const today = new Date();
-    const isLoading: boolean = false;
     const navigate = useNavigate();
     const location = useLocation();
     const addIntermediateCityButtonRef = useRef<any>(null);
@@ -62,6 +63,7 @@ const SearchForm: React.FC<SearchFromProps> = props => {
         initialValues: formValues,
         onSubmit: values => {
             if (formik.isValid) {
+                setLoader(true);
                 //Submit logic here
                 let parsedCitiesArray: [[string, number, number]] | any = [];
                 document.querySelectorAll('input[data-city-selector]').forEach((el: any) => {
@@ -73,14 +75,17 @@ const SearchForm: React.FC<SearchFromProps> = props => {
                         (result: CalculateDistanceResponse) => {
                             if (setTotalDistnceResult) {
                                 setTotalDistnceResult(result.total);
+                                setLoader(false);
                             }
                         },
                         reject => {
                             console.log('reject', reject);
+                            setLoader(false);
                         },
                     )
                     .catch(err => {
                         console.log('This error is thrown when calcualtion goes bad', err);
+                        setLoader(false);
                     });
                 if (location.pathname.includes('search') === false) {
                     navigate('/search');

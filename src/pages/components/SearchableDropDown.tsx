@@ -67,7 +67,7 @@ const SearchableDropDownComponent: React.FC<SearchableDropDownProps> = props => 
                             {...{ 'intermediate-city-id': `${inputIdentifier}` }}
                         />
                     )}
-                    {inputIsLoading && <InputLeftElement children={<Spinner color='red.500' />} />}
+                    {inputIsLoading && <InputLeftElement children={<Spinner color='teal.500' />} />}
                 </InputGroup>
                 {citiesList && (
                     <AutoCompleteList
