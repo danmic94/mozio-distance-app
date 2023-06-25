@@ -1,6 +1,6 @@
 import citiesJSON from '../data/cities.json';
 import CalculateDistanceResponse from '../data/types';
-import haversineDistance from './haversine';
+import { haversineDistance } from './haversine';
 
 /**
  * Returns a random integer between min (inclusive) and max (inclusive).
@@ -87,4 +87,4 @@ const calculateDistanceBetweenCities = (cities: [[string, number, number]]): Pro
     });
 };
 
-export { searchCity, calculateDistanceBetweenCities };
+export { searchCity, calculateDistanceBetweenCities, searchCityEndpoint };

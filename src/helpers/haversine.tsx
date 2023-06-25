@@ -8,11 +8,7 @@
  * @param {number[]} latlngB [lat, lng] point B
  * @param {boolean} isMiles If we are using miles, else km.
  */
-const haversineDistance = (
-    [lat1, lon1]: number[],
-    [lat2, lon2]: number[],
-    isMiles: boolean = false
-) => {
+const haversineDistance = ([lat1, lon1]: number[], [lat2, lon2]: number[], isMiles: boolean = false) => {
     const toRadian = (angle: number) => (Math.PI / 180) * angle;
     const distance = (a: number, b: number) => (Math.PI / 180) * (a - b);
     const RADIUS_OF_EARTH_IN_KM = 6371;
@@ -24,9 +20,7 @@ const haversineDistance = (
     lat2 = toRadian(lat2);
 
     // Haversine Formula
-    const a =
-        Math.pow(Math.sin(dLat / 2), 2) +
-        Math.pow(Math.sin(dLon / 2), 2) * Math.cos(lat1) * Math.cos(lat2);
+    const a = Math.pow(Math.sin(dLat / 2), 2) + Math.pow(Math.sin(dLon / 2), 2) * Math.cos(lat1) * Math.cos(lat2);
     const c = 2 * Math.asin(Math.sqrt(a));
 
     let finalDistance = RADIUS_OF_EARTH_IN_KM * c;
@@ -38,4 +32,4 @@ const haversineDistance = (
     return finalDistance;
 };
 
-export default haversineDistance;
+export { haversineDistance };
