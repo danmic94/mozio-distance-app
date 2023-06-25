@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { Fragment, useRef, useState } from 'react';
 import { useFormik } from 'formik';
 import {
     Box,
@@ -6,7 +6,6 @@ import {
     FormControl,
     FormErrorMessage,
     FormLabel,
-    Heading,
     NumberDecrementStepper,
     NumberIncrementStepper,
     NumberInput,
@@ -17,16 +16,31 @@ import {
 } from '@chakra-ui/react';
 import * as Yup from 'yup';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCity, faRoad, faSpinner } from '@fortawesome/free-solid-svg-icons';
+import { faCity, faSpinner } from '@fortawesome/free-solid-svg-icons';
 import SearchableDropDownComponent from './SearchableDropDown';
 import IntermediateCitiesComponent from './IntermediateCitiesInputs';
 import { SingleDatepicker } from 'chakra-dayzed-datepicker';
+import { useLocation, useNavigate } from 'react-router-dom';
+import { calculateDistanceBetweenCities } from '../../helpers/endpoints';
+import CalculateDistanceResponse from '../../data/types';
 
-interface SearchFromProps {}
+interface SearchFromProps {
+    setTotalDistnceResult?: Function;
+    total?: number;
+}
 
-const SearchForm: React.FC<SearchFromProps> = () => {
+interface CityData {
+    cityName: string;
+    lat: number;
+    long: number;
+}
+
+const SearchForm: React.FC<SearchFromProps> = props => {
+    const { setTotalDistnceResult } = props;
     const today = new Date();
     const isLoading: boolean = false;
+    const navigate = useNavigate();
+    const location = useLocation();
     const addIntermediateCityButtonRef = useRef<any>(null);
     const [intermediateCitiesInputs, setintermediateCitiesInputs] = useState<Map<string, Object>>(new Map());
     const [formValues, setformValues] = useState({
@@ -49,7 +63,28 @@ const SearchForm: React.FC<SearchFromProps> = () => {
         onSubmit: values => {
             if (formik.isValid) {
                 //Submit logic here
-                console.log(values);
+                let parsedCitiesArray: [[string, number, number]] | any = [];
+                document.querySelectorAll('input[data-city-selector]').forEach((el: any) => {
+                    const cityData: CityData = JSON.parse(el.getAttribute('city-data'));
+                    parsedCitiesArray.push([cityData.cityName, cityData.lat, cityData.long]);
+                });
+                calculateDistanceBetweenCities(parsedCitiesArray)
+                    .then(
+                        (result: CalculateDistanceResponse) => {
+                            if (setTotalDistnceResult) {
+                                setTotalDistnceResult(result.total);
+                            }
+                        },
+                        reject => {
+                            console.log('reject', reject);
+                        },
+                    )
+                    .catch(err => {
+                        console.log('This error is thrown when calcualtion goes bad', err);
+                    });
+                if (location.pathname.includes('search') === false) {
+                    navigate('/search');
+                }
             }
         },
         validationSchema: Yup.object(formValidators),
@@ -58,10 +93,7 @@ const SearchForm: React.FC<SearchFromProps> = () => {
     const passangersFieldProps = formik.getFieldProps('passangers');
 
     return (
-        <VStack w='1024px' p={32} alignItems='flex-start'>
-            <Heading as='h1' id='contactme-section'>
-                <FontAwesomeIcon icon={faRoad} /> Find out how many km will take...
-            </Heading>
+        <Fragment>
             <Stack direction='row' spacing={4}>
                 <Button
                     ref={addIntermediateCityButtonRef}
@@ -88,6 +120,7 @@ const SearchForm: React.FC<SearchFromProps> = () => {
                                 hasRightIcon={false}
                                 isInvalid={formik.errors.startCity !== undefined}
                                 errorMessage={formik.errors.startCity}
+                                data-city-selector
                             />
                         </FormControl>
 
@@ -113,6 +146,7 @@ const SearchForm: React.FC<SearchFromProps> = () => {
                                 hasRightIcon={false}
                                 isInvalid={formik.errors.startCity !== undefined}
                                 errorMessage={formik.errors.startCity}
+                                data-city-selector
                             />
                         </FormControl>
 
@@ -156,7 +190,7 @@ const SearchForm: React.FC<SearchFromProps> = () => {
                     {/* </fieldset> */}
                 </form>
             </Box>
-        </VStack>
+        </Fragment>
     );
 };
 

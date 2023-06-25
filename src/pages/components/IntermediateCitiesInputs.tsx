@@ -48,6 +48,33 @@ const IntermediateCitiesComponent: React.FC<IntermediateCitiesProps> = props => 
     };
 
     /**
+     * Creating a new input and inserting
+     * data into appropriate state objects
+     */
+    const addIntermediateCityInput = (): void => {
+        let uniqueId: string = Math.floor(Math.random() * Date.now()).toString(16);
+        let mapKey: string = `intermediate-city-id-${uniqueId}`;
+
+        let newInput: Object = (
+            <FormControl key={mapKey} isInvalid={formObject.errors[mapKey] !== undefined}>
+                <SearchableDropDownComponent
+                    formObject={formObject}
+                    formLabel={'Intermediate city'}
+                    fieldName={mapKey}
+                    hasRightIcon={true}
+                    rightIcon={<FontAwesomeIcon icon={faSquareMinus} />}
+                    inputIdentifier={uniqueId}
+                    iconClickHandler={removeIntermediateCityInput}
+                    isInvalid={formObject.errors[mapKey] !== undefined}
+                    errorMessage={formObject.errors[mapKey]}
+                />
+            </FormControl>
+        );
+
+        createInput(newInput, mapKey);
+    };
+
+    /**
      * Opposite of the createInput cleans up the parent state
      * of all refrencaes to the created intermediate inpu
      *
@@ -72,34 +99,12 @@ const IntermediateCitiesComponent: React.FC<IntermediateCitiesProps> = props => 
     };
 
     useEffect(() => {
-        const addIntermediateCityInput = (): void => {
-            let uniqueId: string = Math.floor(Math.random() * Date.now()).toString(16);
-            let mapKey: string = `intermediate-city-id-${uniqueId}`;
+        const buttonRef = addInputButtonRef.current;
 
-            let newInput: Object = (
-                <FormControl key={mapKey} isInvalid={formObject.errors[mapKey] !== undefined}>
-                    <SearchableDropDownComponent
-                        formObject={formObject}
-                        formLabel={'Intermediate city'}
-                        fieldName={mapKey}
-                        hasRightIcon={true}
-                        rightIcon={<FontAwesomeIcon icon={faSquareMinus} />}
-                        inputIdentifier={uniqueId}
-                        iconClickHandler={removeIntermediateCityInput}
-                        isInvalid={formObject.errors[mapKey] !== undefined}
-                        errorMessage={formObject.errors[mapKey]}
-                    />
-                </FormControl>
-            );
-
-            createInput(newInput, mapKey);
-        };
-
-        const buttonRef = addInputButtonRef;
-        buttonRef.current.addEventListener('click', addIntermediateCityInput);
+        buttonRef.addEventListener('click', addIntermediateCityInput);
         // eslint-disable-next-line react-hooks/exhaustive-deps
         return () => {
-            buttonRef.current.removeEventListener('click', addIntermediateCityInput);
+            buttonRef.removeEventListener('click', addIntermediateCityInput);
         };
     }, []);
 

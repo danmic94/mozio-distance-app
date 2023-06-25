@@ -1,4 +1,5 @@
 import citiesJSON from '../data/cities.json';
+import CalculateDistanceResponse from '../data/types';
 import haversineDistance from './haversine';
 
 /**
@@ -52,7 +53,7 @@ const searchCity = (searchTermn: string): Promise<[]> => {
     });
 };
 
-const calculateDistanceBetweenCities = (cities: [][]): Promise<number> => {
+const calculateDistanceBetweenCities = (cities: [[string, number, number]]): Promise<CalculateDistanceResponse> => {
     return new Promise((resolve: Function, reject: Function) => {
         setTimeout(() => {
             let failFlag = false;
@@ -67,15 +68,21 @@ const calculateDistanceBetweenCities = (cities: [][]): Promise<number> => {
                 return reject('Failed on purpose');
             }
             // const result = { total: 0 };
-            if (cities.length === 2) {
-                console.log('Simpli apply haversineDistance function and return the result');
-            }
-
-            if (cities.length > 2) {
-                console.log('Must loop through cities and create a more advanced oject');
-            }
-
-            return resolve();
+            let result: CalculateDistanceResponse = { total: 0, segmented: [] };
+            let i = 0,
+                next = 1;
+            do {
+                let currentCity: [string, number, number] = cities[i],
+                    nextCity: [string, number, number] = cities[next];
+                let coordinatesCurrent: [number, number] = [currentCity[1], currentCity[2]],
+                    coordinatesNext: [number, number] = [nextCity[1], nextCity[2]];
+                let calcualtedDistance: number = haversineDistance(coordinatesCurrent, coordinatesNext);
+                result.segmented.push([currentCity[0], nextCity[0], parseFloat(calcualtedDistance.toFixed(2))]);
+                result.total += parseFloat(calcualtedDistance.toFixed(2));
+                next += 1;
+                i += 1;
+            } while (cities[next]);
+            return resolve(result);
         }, getRandomInt(0, 1000));
     });
 };
