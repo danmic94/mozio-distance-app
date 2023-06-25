@@ -6,12 +6,11 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faRoad } from '@fortawesome/free-solid-svg-icons';
 import FormContext from '../context/FormContext/FormContext';
 import ErrorAlertComponent from './components/ErrorAlert';
-import CalculationResultComponent from './components/CalculationResult';
 
 interface HomePageProps {}
 
 const HomePageComponent: React.FC<HomePageProps> = () => {
-    const { betweenCities, setTotal, total } = useContext(CalculationResultsContext);
+    const { setTotal } = useContext(CalculationResultsContext);
     const { isLoading, setLoader, showError, setErrorAlertFlag } = useContext(FormContext);
 
     return (
