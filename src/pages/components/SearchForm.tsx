@@ -144,8 +144,8 @@ const SearchForm: React.FC<SearchFromProps> = props => {
                                 formLabel={'Destination'}
                                 fieldName='finalDestination'
                                 hasRightIcon={false}
-                                isInvalid={formik.errors.startCity !== undefined}
-                                errorMessage={formik.errors.startCity}
+                                isInvalid={formik.errors.finalDestination !== undefined}
+                                errorMessage={formik.errors.finalDestination}
                                 data-city-selector
                             />
                         </FormControl>

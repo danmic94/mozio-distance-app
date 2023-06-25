@@ -14,7 +14,7 @@ const HomePageComponent: React.FC<HomePageProps> = () => {
         <Fragment>
             <VStack w='1024px' p={32} alignItems='flex-start'>
                 <Heading as='h1' id='contactme-section'>
-                    <FontAwesomeIcon icon={faRoad} /> Find out how many km will take... {calculationsResultContext.total}
+                    <FontAwesomeIcon icon={faRoad} /> Find out how many km will take...
                 </Heading>
                 <SearchForm setTotalDistnceResult={calculationsResultContext.setTotal} />
             </VStack>
