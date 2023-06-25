@@ -1,6 +1,7 @@
 {
+    "homepage": "https://github.com/danmic94/mozio-distance-app",
     "name": "mozio-distance-app",
-    "version": "0.1.0",
+    "version": "0.2.0",
     "private": true,
     "dependencies": {
         "@chakra-ui/react": "^2.7.1",
@@ -35,7 +36,9 @@
         "build": "react-scripts build",
         "test": "react-scripts test",
         "eject": "react-scripts eject",
-        "format": "prettier --write ."
+        "format": "prettier --write .",
+        "predeploy": "npm run build",
+        "deploy": "gh-pages -d build"
     },
     "husky": {
         "hooks": {
@@ -62,6 +65,7 @@
         ]
     },
     "devDependencies": {
+        "gh-pages": "^5.0.0",
         "husky": "^8.0.3",
         "prettier": "2.8.8"
     }
