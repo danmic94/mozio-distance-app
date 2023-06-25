@@ -6,11 +6,12 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faRoad } from '@fortawesome/free-solid-svg-icons';
 import FormContext from '../context/FormContext/FormContext';
 import ErrorAlertComponent from './components/ErrorAlert';
+import CalculationResultComponent from './components/CalculationResult';
 
 interface HomePageProps {}
 
 const HomePageComponent: React.FC<HomePageProps> = () => {
-    const calculationsResultContext = useContext(CalculationResultsContext);
+    const { betweenCities, setTotal, total } = useContext(CalculationResultsContext);
     const { isLoading, setLoader, showError, setErrorAlertFlag } = useContext(FormContext);
 
     return (
@@ -25,7 +26,7 @@ const HomePageComponent: React.FC<HomePageProps> = () => {
                         <SearchForm
                             isLoading={isLoading}
                             setLoader={setLoader}
-                            setTotalDistnceResult={calculationsResultContext.setTotal}
+                            setTotalDistnceResult={setTotal}
                             setShowError={setErrorAlertFlag}
                         />
                     </Box>

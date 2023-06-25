@@ -33,9 +33,9 @@ const SearchPageComponent: React.FC<SearchPageProps> = () => {
                         />
                     </Box>
                     <Box>
-                        {isLoading === false && betweenCities.length > 1 ? (
+                        {isLoading === false && betweenCities.length ? (
                             <Box p={6} rounded='md' w='100%' alignItems={'flex-end'}>
-                                <CalculationResultComponent results={betweenCities} />
+                                <CalculationResultComponent totalDistance={Math.round(total)} results={betweenCities} />
                             </Box>
                         ) : null}
                     </Box>
