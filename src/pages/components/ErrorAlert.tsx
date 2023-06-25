@@ -9,17 +9,16 @@ interface ErrorAlertProps {
 const ErrorAlertComponent: React.FC<ErrorAlertProps> = props => {
     const { showError, setShowError } = props;
 
-    async function hideError() {
-        await new Promise(resolve => setTimeout(resolve, 3000));
-        setShowError(false);
-        return null;
-    }
-
     useEffect(() => {
+        async function hideError() {
+            await new Promise(resolve => setTimeout(resolve, 3000));
+            setShowError(false);
+            return null;
+        }
         if (showError) {
             hideError();
         }
-    }, [showError]);
+    }, [setShowError, showError]);
 
     return (
         <Alert hidden={showError === false} status='error'>

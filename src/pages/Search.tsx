@@ -1,7 +1,7 @@
 import React, { Fragment, useContext } from 'react';
 import SearchForm from './components/SearchForm';
 import CalculationResultsContext from '../context/CalculationResultsContext/DistanceContext';
-import { Box, Center, Heading, Spinner, Stack, Text, VStack } from '@chakra-ui/react';
+import { Box, Center, Heading, Spinner, Stack, Text } from '@chakra-ui/react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faRoad } from '@fortawesome/free-solid-svg-icons';
 import FormContext from '../context/FormContext/FormContext';
