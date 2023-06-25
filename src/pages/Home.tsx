@@ -1,7 +1,7 @@
 import React, { Fragment, useContext } from 'react';
 import SearchForm from './components/SearchForm';
 import CalculationResultsContext from '../context/CalculationResultsContext/DistanceContext';
-import { Heading, VStack } from '@chakra-ui/react';
+import { Box, Center, Heading, Spinner, Stack, VStack } from '@chakra-ui/react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faRoad } from '@fortawesome/free-solid-svg-icons';
 import FormContext from '../context/FormContext/FormContext';
@@ -15,18 +15,22 @@ const HomePageComponent: React.FC<HomePageProps> = () => {
 
     return (
         <Fragment>
-            <VStack w='1024px' p={32} alignItems='flex-start'>
-                {!isLoading && <ErrorAlertComponent showError={showError} setShowError={setErrorAlertFlag} />}
-                <Heading as='h1' id='contactme-section'>
-                    <FontAwesomeIcon icon={faRoad} /> Find out how many km will take...
-                </Heading>
-                <SearchForm
-                    isLoading={isLoading}
-                    setLoader={setLoader}
-                    setTotalDistnceResult={calculationsResultContext.setTotal}
-                    setShowError={setErrorAlertFlag}
-                />
-            </VStack>
+            <Center paddingTop={'4rem'}>
+                <Stack direction={['column', 'row']} spacing='14rem'>
+                    <Box>
+                        {!isLoading && <ErrorAlertComponent showError={showError} setShowError={setErrorAlertFlag} />}
+                        <Heading as='h1' id='contactme-section'>
+                            <FontAwesomeIcon icon={faRoad} /> Find out how many km will take...
+                        </Heading>
+                        <SearchForm
+                            isLoading={isLoading}
+                            setLoader={setLoader}
+                            setTotalDistnceResult={calculationsResultContext.setTotal}
+                            setShowError={setErrorAlertFlag}
+                        />
+                    </Box>
+                </Stack>
+            </Center>
         </Fragment>
     );
 };

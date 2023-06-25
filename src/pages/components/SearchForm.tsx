@@ -1,4 +1,4 @@
-import React, { Fragment, useRef, useState } from 'react';
+import React, { Fragment, useContext, useRef, useState } from 'react';
 import { useFormik } from 'formik';
 import {
     Box,
@@ -23,6 +23,7 @@ import { SingleDatepicker } from 'chakra-dayzed-datepicker';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { calculateDistanceBetweenCities } from '../../helpers/endpoints';
 import CalculateDistanceResponse from '../../data/types';
+import CalculationResultsContext from '../../context/CalculationResultsContext/DistanceContext';
 
 interface SearchFromProps {
     setTotalDistnceResult?: Function;
@@ -40,6 +41,7 @@ interface CityData {
 
 const SearchForm: React.FC<SearchFromProps> = props => {
     const { setTotalDistnceResult, isLoading, setLoader, setShowError } = props;
+    const { setBetweenCities } = useContext(CalculationResultsContext);
     const today = new Date();
     const navigate = useNavigate();
     const location = useLocation();
@@ -75,6 +77,7 @@ const SearchForm: React.FC<SearchFromProps> = props => {
                     .then(
                         (result: CalculateDistanceResponse) => {
                             if (setTotalDistnceResult) {
+                                setBetweenCities(result.segmented);
                                 setTotalDistnceResult(result.total);
                                 setLoader(false);
                             }
@@ -183,7 +186,7 @@ const SearchForm: React.FC<SearchFromProps> = props => {
                                 </FormControl>
                             </Box>
 
-                            <Box w='20%'>
+                            <Box w='30%'>
                                 {/* DatePicker Here */}
                                 <FormControl isInvalid={formik.errors.departureDate !== undefined}>
                                     <FormLabel htmlFor='departureDate'>Day of travel</FormLabel>
