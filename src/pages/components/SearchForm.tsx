@@ -98,8 +98,6 @@ const SearchForm: React.FC<SearchFromProps> = props => {
     const passangersFieldProps = formik.getFieldProps('passangers');
     const departureDateFieldProps = formik.getFieldProps('departureDate');
 
-    console.log(formik.errors);
-
     return (
         <Fragment>
             <Stack direction='row' spacing={4}>
