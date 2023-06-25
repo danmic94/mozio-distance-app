@@ -2,7 +2,7 @@
     "homepage": "https://github.com/danmic94/mozio-distance-app",
     "name": "mozio-distance-app",
     "version": "0.2.0",
-    "private": true,
+    "private": false,
     "dependencies": {
         "@chakra-ui/react": "^2.7.1",
         "@choc-ui/chakra-autocomplete": "^5.1.5",
