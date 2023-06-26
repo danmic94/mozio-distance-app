@@ -106,6 +106,7 @@ const IntermediateCitiesComponent: React.FC<IntermediateCitiesProps> = props => 
         return () => {
             buttonRef.removeEventListener('click', addIntermediateCityInput);
         };
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     const renderItermediateCitiesInputs = () => {

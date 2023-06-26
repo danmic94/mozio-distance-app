@@ -38,3 +38,7 @@ Interview task that involves the haversine formulan and a React App
 
 -   [x] Unit tests
 -   [ ] E2E partial testing
+
+You can use this query string to test is the distance is calculated [^boh] blah.
+
+[^boh]: ?startCity=Strasbourg&finalDestination=Saint-Étienne&passangers=2&departureDate=Mon+Jun+26+2023+13%3A17%3A42+GMT%2B0300+%28Eastern+European+Summer+Time%29&citiesData=Strasbourg%2C48.573405%2C7.752111%2CSaint-Étienne%2C45.439695%2C4.387178.

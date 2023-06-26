@@ -71,6 +71,7 @@ const SearchForm: React.FC<SearchFromProps> = props => {
         onSubmit: values => {
             if (formik.isValid) {
                 setLoader(true);
+                setFormValues(values);
                 //Submit logic here
                 let parsedCitiesArray: [[string, number, number]] | any = [];
                 document.querySelectorAll('input[data-city-selector]').forEach((el: any) => {
@@ -109,8 +110,6 @@ const SearchForm: React.FC<SearchFromProps> = props => {
                         pathname: '/search',
                         search: `?${new URLSearchParams(parsed)}`,
                     };
-                    console.log(options);
-
                     navigate(options);
                 }
             }
