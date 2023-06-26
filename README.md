@@ -22,7 +22,7 @@ Interview task that involves the haversine formulan and a React App
     -   [x] Calculating the involvement the distance of the route (in kilometers using Haversine fake API call) should be calculated and displayed;
     -   [x] Display distance between subsequent cities if added and also show total distance;
     -   [x] Distance calculation should be handled as an ASYNC API call with **UI loader informing the user of the server processing** :hourglass_flowing_sand:;
-    -   [ ] Should take in the query string from home route and be reusable and shareable;
+    -   [x] Should take in the query string from home route and be reusable and shareable; (should be nice to add link with copy to clipboard)
 
 ## Technical Requirements
 
@@ -32,7 +32,7 @@ Interview task that involves the haversine formulan and a React App
 -   [x] The second endpoint receives a list of cities and calculates the distances.
 -   [x] :bangbang: Searching for the phrase “fail” (case-insensitive) the mocked API should fail to return results to demonstrate the error handling abilities of the UI
 -   [x] :interrobang: **Searching for Dijon should throw an error to dispaly UI handling of such cases**;
--   [ ] Deploy to some free service for public availability;
+-   [x] Deploy to some free service for public availability;
 
 ## Nice to have or extras
 
