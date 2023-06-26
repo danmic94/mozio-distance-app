@@ -1,15 +1,15 @@
 {
   "files": {
     "main.css": "/mozio-distance-app/static/css/main.27c7355d.css",
-    "main.js": "/mozio-distance-app/static/js/main.aa6d874b.js",
+    "main.js": "/mozio-distance-app/static/js/main.34786e8f.js",
     "static/js/787.761bcc3a.chunk.js": "/mozio-distance-app/static/js/787.761bcc3a.chunk.js",
     "index.html": "/mozio-distance-app/index.html",
     "main.27c7355d.css.map": "/mozio-distance-app/static/css/main.27c7355d.css.map",
-    "main.aa6d874b.js.map": "/mozio-distance-app/static/js/main.aa6d874b.js.map",
+    "main.34786e8f.js.map": "/mozio-distance-app/static/js/main.34786e8f.js.map",
     "787.761bcc3a.chunk.js.map": "/mozio-distance-app/static/js/787.761bcc3a.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.27c7355d.css",
-    "static/js/main.aa6d874b.js"
+    "static/js/main.34786e8f.js"
   ]
 }
