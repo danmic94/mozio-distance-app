@@ -11,7 +11,18 @@ import CalculationResultComponent from './components/CalculationResult';
 interface SearchPageProps {}
 
 const SearchPageComponent: React.FC<SearchPageProps> = () => {
-    const { isLoading, setLoader, showError, setErrorAlertFlag } = useContext(FormContext);
+    const {
+        isLoading,
+        setLoader,
+        showError,
+        setErrorAlertFlag,
+        intermediateCitiesInputs,
+        setintermediateCitiesInputs,
+        formValues,
+        setFormValues,
+        formValidations,
+        setFormValidations,
+    } = useContext(FormContext);
     const { total, setTotal, betweenCities } = useContext(CalculationResultsContext);
 
     return (
@@ -30,6 +41,12 @@ const SearchPageComponent: React.FC<SearchPageProps> = () => {
                             isLoading={isLoading}
                             setLoader={setLoader}
                             setShowError={setErrorAlertFlag}
+                            intermediateCitiesInputs={intermediateCitiesInputs}
+                            setIntermediateCitiesInputs={setintermediateCitiesInputs}
+                            formValues={formValues}
+                            setFormValues={setFormValues}
+                            formValidators={formValidations}
+                            setformValidators={setFormValidations}
                         />
                     </Box>
                     <Box>

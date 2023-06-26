@@ -12,8 +12,6 @@ const CalculationResultComponent: React.FC<CalculationResultProps> = props => {
     const { results, totalDistance } = props;
     const fetchListIcon = (index: number, listLength: number): IconDefinition => {
         let icon: IconDefinition = faCar;
-        console.log(index, listLength);
-
         switch (index) {
             case 0:
                 icon = faCar;

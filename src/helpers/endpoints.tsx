@@ -67,7 +67,6 @@ const calculateDistanceBetweenCities = (cities: [[string, number, number]]): Pro
             if (failFlag) {
                 return reject('Failed on purpose');
             }
-            // const result = { total: 0 };
             let result: CalculateDistanceResponse = { total: 0, segmented: [] };
             let i = 0,
                 next = 1;

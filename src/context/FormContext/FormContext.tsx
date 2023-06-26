@@ -5,6 +5,12 @@ export interface FormContextState {
     setLoader: Function;
     showError: boolean;
     setErrorAlertFlag: Function;
+    intermediateCitiesInputs: Map<string, Object>;
+    setintermediateCitiesInputs: Function;
+    formValues: Object;
+    setFormValues: Function;
+    formValidations: Object;
+    setFormValidations: Function;
 }
 
 const FormContext = createContext<FormContextState>({
@@ -12,6 +18,12 @@ const FormContext = createContext<FormContextState>({
     setLoader: () => {},
     showError: false,
     setErrorAlertFlag: () => {},
+    intermediateCitiesInputs: new Map(),
+    setintermediateCitiesInputs: () => {},
+    formValues: {},
+    setFormValues: () => {},
+    formValidations: {},
+    setFormValidations: () => {},
 });
 
 export default FormContext;

@@ -11,7 +11,18 @@ interface HomePageProps {}
 
 const HomePageComponent: React.FC<HomePageProps> = () => {
     const { setTotal } = useContext(CalculationResultsContext);
-    const { isLoading, setLoader, showError, setErrorAlertFlag } = useContext(FormContext);
+    const {
+        isLoading,
+        setLoader,
+        showError,
+        setErrorAlertFlag,
+        intermediateCitiesInputs,
+        setintermediateCitiesInputs,
+        formValues,
+        setFormValues,
+        formValidations,
+        setFormValidations,
+    } = useContext(FormContext);
 
     return (
         <Fragment>
@@ -27,6 +38,12 @@ const HomePageComponent: React.FC<HomePageProps> = () => {
                             setLoader={setLoader}
                             setTotalDistnceResult={setTotal}
                             setShowError={setErrorAlertFlag}
+                            intermediateCitiesInputs={intermediateCitiesInputs}
+                            setIntermediateCitiesInputs={setintermediateCitiesInputs}
+                            formValues={formValues}
+                            setFormValues={setFormValues}
+                            formValidators={formValidations}
+                            setformValidators={setFormValidations}
                         />
                     </Box>
                 </Stack>

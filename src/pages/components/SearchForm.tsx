@@ -31,6 +31,12 @@ interface SearchFromProps {
     isLoading: boolean;
     setLoader: Function;
     setShowError: Function;
+    formValues: Object;
+    setFormValues: Function;
+    formValidators: Object | any;
+    setformValidators: Function;
+    intermediateCitiesInputs: Map<string, Object>;
+    setIntermediateCitiesInputs: Function;
 }
 
 interface CityData {
@@ -40,25 +46,23 @@ interface CityData {
 }
 
 const SearchForm: React.FC<SearchFromProps> = props => {
-    const { setTotalDistnceResult, isLoading, setLoader, setShowError } = props;
+    const {
+        setTotalDistnceResult,
+        isLoading,
+        setLoader,
+        setShowError,
+        intermediateCitiesInputs,
+        setIntermediateCitiesInputs,
+        formValidators,
+        setformValidators,
+        formValues,
+        setFormValues,
+    } = props;
     const { setBetweenCities } = useContext(CalculationResultsContext);
     const today = new Date();
     const navigate = useNavigate();
     const location = useLocation();
     const addIntermediateCityButtonRef = useRef<any>(null);
-    const [intermediateCitiesInputs, setintermediateCitiesInputs] = useState<Map<string, Object>>(new Map());
-    const [formValues, setformValues] = useState({
-        startCity: '',
-        finalDestination: '',
-        passangers: 1,
-        departureDate: today,
-    });
-    const [formValidators, setformValidators] = useState({
-        startCity: Yup.string().required('Required'),
-        finalDestination: Yup.string().required('Required'),
-        passangers: Yup.number().integer().min(1, 'Must have at least one passanger!').required('Required'),
-        departureDate: Yup.date().min(today, 'Date is in the past!').required('Required!'),
-    });
 
     const [date, setDate] = useState(new Date());
 
@@ -94,7 +98,20 @@ const SearchForm: React.FC<SearchFromProps> = props => {
                         setShowError(true);
                     });
                 if (location.pathname.includes('search') === false) {
-                    navigate('/search');
+                    const parsed: any = {};
+                    Object.keys(values).forEach(current => {
+                        parsed[current] = (values as any)[current];
+                    });
+
+                    parsed.citiesData = parsedCitiesArray;
+
+                    const options = {
+                        pathname: '/search',
+                        search: `?${new URLSearchParams(parsed)}`,
+                    };
+                    console.log(options);
+
+                    navigate(options);
                 }
             }
         },
@@ -103,6 +120,8 @@ const SearchForm: React.FC<SearchFromProps> = props => {
 
     const passangersFieldProps = formik.getFieldProps('passangers');
     const departureDateFieldProps = formik.getFieldProps('departureDate');
+    let { errors } = formik;
+    let convertedErrors = errors as any;
 
     return (
         <Fragment>
@@ -124,14 +143,14 @@ const SearchForm: React.FC<SearchFromProps> = props => {
                     {/* <fieldset disabled={isLoading ? "disabled" : ""} > */}
                     <VStack spacing={4}>
                         {/* Start city destionation input */}
-                        <FormControl isInvalid={formik.errors.startCity !== undefined}>
+                        <FormControl isInvalid={convertedErrors?.startCity !== undefined}>
                             <SearchableDropDownComponent
                                 formObject={formik}
                                 formLabel={'Start city'}
                                 fieldName='startCity'
                                 hasRightIcon={false}
-                                isInvalid={formik.errors.startCity !== undefined}
-                                errorMessage={formik.errors.startCity}
+                                isInvalid={convertedErrors?.startCity !== undefined}
+                                errorMessage={convertedErrors?.startCity}
                                 data-city-selector
                             />
                         </FormControl>
@@ -140,24 +159,24 @@ const SearchForm: React.FC<SearchFromProps> = props => {
                         <IntermediateCitiesComponent
                             addInputButtonRef={addIntermediateCityButtonRef}
                             inputs={intermediateCitiesInputs}
-                            setInputs={setintermediateCitiesInputs}
+                            setInputs={setIntermediateCitiesInputs}
                             formObject={formik}
                             setInputsValidation={setformValidators}
                             formValidationObject={formValidators}
                             formValues={formValues}
-                            setFormValues={setformValues}
+                            setFormValues={setFormValues}
                         />
                         {/* End of the dynamically added inputs or in between cities  */}
 
                         {/* Final city destionation input */}
-                        <FormControl isInvalid={formik.errors.finalDestination !== undefined}>
+                        <FormControl isInvalid={convertedErrors?.finalDestination !== undefined}>
                             <SearchableDropDownComponent
                                 formObject={formik}
                                 formLabel={'Destination'}
                                 fieldName='finalDestination'
                                 hasRightIcon={false}
-                                isInvalid={formik.errors.finalDestination !== undefined}
-                                errorMessage={formik.errors.finalDestination}
+                                isInvalid={convertedErrors?.finalDestination !== undefined}
+                                errorMessage={convertedErrors?.finalDestination}
                                 data-city-selector
                             />
                         </FormControl>
@@ -165,10 +184,10 @@ const SearchForm: React.FC<SearchFromProps> = props => {
                         {/* Passaengers number input section */}
                         <Stack direction={['column', 'row']} spacing='24px' w='100%'>
                             <Box w='20%'>
-                                <FormControl isInvalid={formik.errors.passangers !== undefined}>
+                                <FormControl isInvalid={convertedErrors?.passangers !== undefined}>
                                     <FormLabel htmlFor='passanger'>Passangers</FormLabel>
                                     <NumberInput
-                                        isInvalid={formik.errors.passangers !== undefined}
+                                        isInvalid={convertedErrors?.passangers !== undefined}
                                         defaultValue={1}
                                         isRequired={true}
                                         min={1}
@@ -182,13 +201,13 @@ const SearchForm: React.FC<SearchFromProps> = props => {
                                             <NumberDecrementStepper />
                                         </NumberInputStepper>
                                     </NumberInput>
-                                    <FormErrorMessage>{formik.errors.passangers}</FormErrorMessage>
+                                    <FormErrorMessage>{convertedErrors?.passangers}</FormErrorMessage>
                                 </FormControl>
                             </Box>
 
                             <Box w='30%'>
                                 {/* DatePicker Here */}
-                                <FormControl isInvalid={formik.errors.departureDate !== undefined}>
+                                <FormControl isInvalid={convertedErrors?.departureDate !== undefined}>
                                     <FormLabel htmlFor='departureDate'>Day of travel</FormLabel>
                                     <SingleDatepicker
                                         date={date}
@@ -199,9 +218,7 @@ const SearchForm: React.FC<SearchFromProps> = props => {
                                         {...departureDateFieldProps}
                                         minDate={today}
                                     />
-                                    {formik?.errors?.departureDate ? (
-                                        <FormErrorMessage>{formik.errors.departureDate as string}</FormErrorMessage>
-                                    ) : null}
+                                    <FormErrorMessage>{convertedErrors?.departureDate}</FormErrorMessage>
                                 </FormControl>
                             </Box>
                         </Stack>

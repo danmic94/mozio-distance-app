@@ -27,8 +27,9 @@ const SearchableDropDownComponent: React.FC<SearchableDropDownProps> = props => 
                 setinputIsLoading(false);
             },
             () => {
-                console.log('failure here');
                 setinputIsLoading(false);
+                formObject.setFieldError(fieldName, 'Server autocomplete failed!');
+                console.log('failure here');
             },
         );
     };
