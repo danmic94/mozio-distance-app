@@ -1,4 +1,4 @@
-import React, { Fragment, useState } from 'react';
+import React, { Fragment, useEffect, useState } from 'react';
 import { FormErrorMessage, FormLabel, InputGroup, InputLeftElement, InputRightElement, Spinner } from '@chakra-ui/react';
 import { AutoComplete, AutoCompleteInput, AutoCompleteItem, AutoCompleteList } from '@choc-ui/chakra-autocomplete';
 import { searchCity } from '../../helpers/endpoints';

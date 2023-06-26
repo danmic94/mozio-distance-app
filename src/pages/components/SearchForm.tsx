@@ -211,7 +211,6 @@ const SearchForm: React.FC<SearchFromProps> = props => {
                                     <SingleDatepicker
                                         date={date}
                                         onDateChange={e => {
-                                            console.log(e);
                                             setDate(e);
                                         }}
                                         {...departureDateFieldProps}

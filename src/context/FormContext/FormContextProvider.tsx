@@ -19,6 +19,7 @@ const FormContextProvider: React.FC<PropsWithChildren> = props => {
         passangers: Yup.number().integer().min(1, 'Must have at least one passanger!').required('Required'),
         departureDate: Yup.date().min(today, 'Date is in the past!').required('Required!'),
     });
+
     return (
         <FormContext.Provider
             value={{

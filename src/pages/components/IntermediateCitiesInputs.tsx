@@ -26,25 +26,16 @@ const IntermediateCitiesComponent: React.FC<IntermediateCitiesProps> = props => 
      * form values and validators plus the react component
      * of the input itself
      *
-     * @param newInput
      * @param mapKey
      */
-    const createInput = (newInput: Object, mapKey: string): void => {
+    const createInput = (mapKey: string): void => {
         //Setting up validations
-        const updatedValidations = { ...formValidationObject };
-        updatedValidations[mapKey] = Yup.string().required('Required');
-        setInputsValidation(updatedValidations);
-
+        setInputsValidation((prevState: any) => ({ ...prevState, [mapKey]: Yup.string().required('Required!') }));
         //Add values to form
-        const updatedFormValues = { ...formValues };
-        updatedFormValues[mapKey] = '';
-        setFormValues(updatedFormValues);
-        formObject.validateForm();
+        setFormValues((prevState: any) => ({ ...prevState, [mapKey]: '' }));
+        console.log(formValues);
 
-        // Adding the new input in the parent state map object
-        setInputs((oldValues: any) => {
-            return new Map(oldValues.set(mapKey, newInput));
-        });
+        formObject.validateForm();
     };
 
     /**
@@ -54,9 +45,11 @@ const IntermediateCitiesComponent: React.FC<IntermediateCitiesProps> = props => 
     const addIntermediateCityInput = (): void => {
         let uniqueId: string = Math.floor(Math.random() * Date.now()).toString(16);
         let mapKey: string = `intermediate-city-id-${uniqueId}`;
+        createInput(mapKey);
+        let { errors } = formObject;
 
         let newInput: Object = (
-            <FormControl key={mapKey} isInvalid={formObject.errors[mapKey] !== undefined}>
+            <FormControl key={mapKey} isInvalid={errors[mapKey] !== undefined}>
                 <SearchableDropDownComponent
                     formObject={formObject}
                     formLabel={'Intermediate city'}
@@ -65,13 +58,16 @@ const IntermediateCitiesComponent: React.FC<IntermediateCitiesProps> = props => 
                     rightIcon={<FontAwesomeIcon icon={faSquareMinus} />}
                     inputIdentifier={uniqueId}
                     iconClickHandler={removeIntermediateCityInput}
-                    isInvalid={formObject.errors[mapKey] !== undefined}
-                    errorMessage={formObject.errors[mapKey]}
+                    isInvalid={errors[mapKey] !== undefined}
+                    errorMessage={errors[mapKey]}
                 />
             </FormControl>
         );
 
-        createInput(newInput, mapKey);
+        // Adding the new input in the parent state map object
+        setInputs((oldValues: any) => {
+            return new Map(oldValues.set(mapKey, newInput));
+        });
     };
 
     /**
@@ -100,7 +96,6 @@ const IntermediateCitiesComponent: React.FC<IntermediateCitiesProps> = props => 
 
     useEffect(() => {
         const buttonRef = addInputButtonRef.current;
-
         buttonRef.addEventListener('click', addIntermediateCityInput);
         // eslint-disable-next-line react-hooks/exhaustive-deps
         return () => {
