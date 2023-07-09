@@ -13,7 +13,6 @@ const ErrorAlertComponent: React.FC<ErrorAlertProps> = props => {
         async function hideError() {
             await new Promise(resolve => setTimeout(resolve, 3000));
             setShowError(false);
-            return null;
         }
         if (showError) {
             hideError();
@@ -21,7 +20,7 @@ const ErrorAlertComponent: React.FC<ErrorAlertProps> = props => {
     }, [setShowError, showError]);
 
     return (
-        <Alert hidden={showError === false} status='error'>
+        <Alert hidden={!showError} status='error'>
             <AlertIcon />
             <AlertTitle>Something went wrong on the server side!</AlertTitle>
             <AlertDescription>Sorry for the inconvenince 🤷.</AlertDescription>

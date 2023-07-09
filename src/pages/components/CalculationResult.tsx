@@ -1,8 +1,9 @@
 import { Button, Heading, List, ListItem, Text } from '@chakra-ui/react';
 import { IconDefinition, faCar, faEllipsisVertical, faFlagCheckered } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Fragment, ReactNode } from 'react';
+import { Fragment, ReactNode, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
+import FormContext from '../../context/FormContext/FormContext';
 
 interface CalculationResultProps {
     results: Array<[string, string, number]>;
@@ -12,6 +13,7 @@ interface CalculationResultProps {
 const CalculationResultComponent: React.FC<CalculationResultProps> = props => {
     const { results, totalDistance } = props;
     const navigate = useNavigate();
+    const { setErrorAlertFlag } = useContext(FormContext);
     const fetchListIcon = (index: number, listLength: number): IconDefinition => {
         let icon: IconDefinition = faCar;
         switch (index) {
@@ -62,6 +64,12 @@ const CalculationResultComponent: React.FC<CalculationResultProps> = props => {
         } while (cities[i]);
         return toRenderInputs;
     };
+    
+    const returnHome = () => {
+        navigate('/');
+        setErrorAlertFlag(false);
+    }
+
     return (
         <Fragment>
             <Heading marginBottom={'1rem'} textAlign={'left'}>
@@ -71,7 +79,7 @@ const CalculationResultComponent: React.FC<CalculationResultProps> = props => {
             <Button
                 marginTop={'1rem'}
                 colorScheme='teal'
-                onClick={() => navigate('/')}
+                onClick={returnHome}
                 variant='outline'>
                 Go back to serach...
             </Button>

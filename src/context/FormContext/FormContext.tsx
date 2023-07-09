@@ -7,10 +7,6 @@ export interface FormContextState {
     setErrorAlertFlag: Function;
     intermediateCitiesInputs: Map<string, Object>;
     setintermediateCitiesInputs: Function;
-    formValues: Object;
-    setFormValues: Function;
-    formValidations: Object;
-    setFormValidations: Function;
 }
 
 const FormContext = createContext<FormContextState>({
@@ -19,11 +15,7 @@ const FormContext = createContext<FormContextState>({
     showError: false,
     setErrorAlertFlag: () => {},
     intermediateCitiesInputs: new Map(),
-    setintermediateCitiesInputs: () => {},
-    formValues: {},
-    setFormValues: () => {},
-    formValidations: {},
-    setFormValidations: () => {},
+    setintermediateCitiesInputs: () => {}
 });
 
 export default FormContext;

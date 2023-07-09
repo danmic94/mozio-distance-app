@@ -1,4 +1,4 @@
-import React, { Fragment, useContext } from 'react';
+import React, { Fragment, useContext, useEffect } from 'react';
 import SearchForm from './components/SearchForm';
 import CalculationResultsContext from '../context/CalculationResultsContext/DistanceContext';
 import { Box, Center, Heading, Stack } from '@chakra-ui/react';
@@ -18,18 +18,18 @@ const HomePageComponent: React.FC<HomePageProps> = () => {
         setErrorAlertFlag,
         intermediateCitiesInputs,
         setintermediateCitiesInputs,
-        formValues,
-        setFormValues,
-        formValidations,
-        setFormValidations,
     } = useContext(FormContext);
+
+    useEffect(() => {
+        console.log(showError);
+    },[])
 
     return (
         <Fragment>
             <Center paddingTop={'4rem'}>
                 <Stack direction={['column', 'row']} spacing='14rem'>
                     <Box>
-                        {!isLoading && <ErrorAlertComponent showError={showError} setShowError={setErrorAlertFlag} />}
+                        {!isLoading && showError && <ErrorAlertComponent showError={showError} setShowError={setErrorAlertFlag} />}
                         <Heading as='h1' id='contactme-section'>
                             <FontAwesomeIcon icon={faRoad} /> Find out how many km will take...
                         </Heading>
@@ -40,10 +40,6 @@ const HomePageComponent: React.FC<HomePageProps> = () => {
                             setShowError={setErrorAlertFlag}
                             intermediateCitiesInputs={intermediateCitiesInputs}
                             setIntermediateCitiesInputs={setintermediateCitiesInputs}
-                            formValues={formValues}
-                            setFormValues={setFormValues}
-                            formValidators={formValidations}
-                            setformValidators={setFormValidations}
                         />
                     </Box>
                 </Stack>

@@ -20,7 +20,7 @@ import { faCity, faSpinner } from '@fortawesome/free-solid-svg-icons';
 import SearchableDropDownComponent from './SearchableDropDown';
 import IntermediateCitiesComponent from './IntermediateCitiesInputs';
 import { SingleDatepicker } from 'chakra-dayzed-datepicker';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { calculateDistanceBetweenCities } from '../../helpers/endpoints';
 import CalculateDistanceResponse from '../../data/types';
 import CalculationResultsContext from '../../context/CalculationResultsContext/DistanceContext';
@@ -31,10 +31,6 @@ interface SearchFromProps {
     isLoading: boolean;
     setLoader: Function;
     setShowError: Function;
-    formValues: Object;
-    setFormValues: Function;
-    formValidators: Object | any;
-    setformValidators: Function;
     intermediateCitiesInputs: Map<string, Object>;
     setIntermediateCitiesInputs: Function;
 }
@@ -52,17 +48,26 @@ const SearchForm: React.FC<SearchFromProps> = props => {
         setLoader,
         setShowError,
         intermediateCitiesInputs,
-        setIntermediateCitiesInputs,
-        formValidators,
-        setformValidators,
-        formValues,
-        setFormValues,
+        setIntermediateCitiesInputs
     } = props;
     const { setBetweenCities } = useContext(CalculationResultsContext);
     const today = new Date();
     const navigate = useNavigate();
-    const location = useLocation();
     const addIntermediateCityButtonRef = useRef<any>(null);
+
+    const [formValues, setformValues] = useState({
+        startCity: '',
+        finalDestination: '',
+        passangers: 1,
+        departureDate: today,
+    });
+
+    const [formValidators, setformValidators] = useState({
+        startCity: Yup.string().required('Required'),
+        finalDestination: Yup.string().required('Required'),
+        passangers: Yup.number().integer().min(1, 'Must have at least one passanger!').required('Required'),
+        departureDate: Yup.date().min(today, 'Date is in the past!').required('Required!'),
+    });
 
     const [date, setDate] = useState(new Date());
 
@@ -71,7 +76,7 @@ const SearchForm: React.FC<SearchFromProps> = props => {
         onSubmit: values => {
             if (formik.isValid) {
                 setLoader(true);
-                setFormValues(values);
+                setformValues(values);
                 //Submit logic here
                 try {
                     let parsedCitiesArray: [[string, number, number]] | any = [];
@@ -86,11 +91,13 @@ const SearchForm: React.FC<SearchFromProps> = props => {
                                     setBetweenCities(result.segmented);
                                     setTotalDistnceResult(result.total);
                                     setLoader(false);
+                                    navigate('search');
                                 }
                             },
                             reject => {
                                 console.log('reject', reject);
                                 setLoader(false);
+                                formik.resetForm();
                                 setShowError(true);
                             },
                         )
@@ -99,20 +106,6 @@ const SearchForm: React.FC<SearchFromProps> = props => {
                             setLoader(false);
                             setShowError(true);
                         });
-                    if (location.pathname.includes('search') === false) {
-                        const parsed: any = {};
-                        Object.keys(values).forEach(current => {
-                            parsed[current] = (values as any)[current];
-                        });
-    
-                        parsed.citiesData = parsedCitiesArray;
-    
-                        const options = {
-                            pathname: '/search',
-                            search: `?${new URLSearchParams(parsed)}`,
-                        };
-                        navigate(options);
-                    }
                 } catch (error) {
                     console.log('An error took place', error);
                     formik.resetForm();
@@ -171,7 +164,7 @@ const SearchForm: React.FC<SearchFromProps> = props => {
                             setInputsValidation={setformValidators}
                             formValidationObject={formValidators}
                             formValues={formValues}
-                            setFormValues={setFormValues}
+                            setFormValues={setformValues}
                         />
                         {/* End of the dynamically added inputs or in between cities  */}
 
