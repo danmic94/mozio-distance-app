@@ -1,31 +1,23 @@
 import React, { Fragment, useContext, useEffect } from 'react';
-import SearchForm from './components/SearchForm';
 import CalculationResultsContext from '../context/CalculationResultsContext/DistanceContext';
-import { Box, Center, Heading, Spinner, Stack, Text } from '@chakra-ui/react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faRoad } from '@fortawesome/free-solid-svg-icons';
+import { Alert, AlertDescription, AlertIcon, AlertTitle, Box, Button, Center, Heading, Spinner, Stack, Text } from '@chakra-ui/react';
 import FormContext from '../context/FormContext/FormContext';
-import ErrorAlertComponent from './components/ErrorAlert';
 import CalculationResultComponent from './components/CalculationResult';
-import { useSearchParams } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { calculateDistanceBetweenCities } from '../helpers/endpoints';
 import CalculateDistanceResponse from '../data/types';
+import ErrorAlertComponent from './components/ErrorAlert';
 
-interface SearchPageProps {}
+interface SearchPageProps { }
 
 const SearchPageComponent: React.FC<SearchPageProps> = () => {
+    const navigate = useNavigate();
     const [searchParams] = useSearchParams();
     const {
         isLoading,
         setLoader,
-        showError,
         setErrorAlertFlag,
-        intermediateCitiesInputs,
-        setintermediateCitiesInputs,
-        formValues,
-        setFormValues,
-        formValidations,
-        setFormValidations,
+        showError,
     } = useContext(FormContext);
     const { total, setTotal, betweenCities, setBetweenCities } = useContext(CalculationResultsContext);
 
@@ -62,28 +54,37 @@ const SearchPageComponent: React.FC<SearchPageProps> = () => {
     return (
         <Fragment>
             <Center paddingTop={'4rem'}>
-                <Stack direction={['column', 'row']} spacing='14rem'>
+                <Stack direction={['column', 'row']}>
                     <Box>
-                        {!isLoading && <ErrorAlertComponent showError={showError} setShowError={setErrorAlertFlag} />}
-                        <Heading as='h1' id='contactme-section'>
-                            <FontAwesomeIcon icon={faRoad} /> Find out how many km will take...
-                            <br />
-                            {isLoading ? <Spinner color='teal.500' /> : <Text textAlign={'left'}>A total of: {Math.round(total)} KM</Text>}
-                        </Heading>
-                        <SearchForm
-                            setTotalDistnceResult={setTotal}
-                            isLoading={isLoading}
-                            setLoader={setLoader}
-                            setShowError={setErrorAlertFlag}
-                            intermediateCitiesInputs={intermediateCitiesInputs}
-                            setIntermediateCitiesInputs={setintermediateCitiesInputs}
-                            formValues={formValues}
-                            setFormValues={setFormValues}
-                            formValidators={formValidations}
-                            setformValidators={setFormValidations}
-                        />
-                    </Box>
-                    <Box>
+                        {!isLoading &&
+                            <Fragment>
+                                <ErrorAlertComponent showError={showError} setShowError={setErrorAlertFlag} />
+                                <Alert
+                                    status='error'
+                                    variant='subtle'
+                                    flexDirection='column'
+                                    alignItems='center'
+                                    justifyContent='center'
+                                    textAlign='center'
+                                    height='400px'
+                                >
+                                    <AlertIcon boxSize='40px' mr={0} />
+                                    <AlertTitle mt={4} mb={1} fontSize='lg'>
+                                        Calculation failed
+                                    </AlertTitle>
+                                    <AlertDescription maxWidth='md'>
+                                        Sorry there was a problem while calculating your requested distance.
+                                    </AlertDescription>
+                                    <br/>
+                                    <Button
+                                        colorScheme='teal'
+                                        onClick={() => navigate('/')}
+                                        variant='outline'>
+                                        Go back to serach...
+                                    </Button>
+                                </Alert>
+                            </Fragment>
+                        }
                         {isLoading === false && betweenCities.length ? (
                             <Box p={6} rounded='md' w='100%' alignItems={'flex-end'}>
                                 <CalculationResultComponent totalDistance={Math.round(total)} results={betweenCities} />

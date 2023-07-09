@@ -4,15 +4,20 @@ import * as Yup from 'yup';
 
 const FormContextProvider: React.FC<PropsWithChildren> = props => {
     const today = new Date();
-    const [isLoading, setIsLoading] = useState(false);
-    const [showError, setShowError] = useState(false);
-    const [intermediateCitiesInputs, setintermediateCitiesInputs] = useState<Map<string, Object>>(new Map());
-    const [formValues, setformValues] = useState({
+
+    const formDefaultValues = {
         startCity: '',
         finalDestination: '',
         passangers: 1,
         departureDate: today,
-    });
+    };
+
+    const [isLoading, setIsLoading] = useState(false);
+    const [showError, setShowError] = useState(false);
+    const [intermediateCitiesInputs, setintermediateCitiesInputs] = useState<Map<string, Object>>(new Map());
+
+    const [formValues, setformValues] = useState(formDefaultValues);
+
     const [formValidators, setformValidators] = useState({
         startCity: Yup.string().required('Required'),
         finalDestination: Yup.string().required('Required'),

@@ -33,9 +33,6 @@ const IntermediateCitiesComponent: React.FC<IntermediateCitiesProps> = props => 
         setInputsValidation((prevState: any) => ({ ...prevState, [mapKey]: Yup.string().required('Required!') }));
         //Add values to form
         setFormValues((prevState: any) => ({ ...prevState, [mapKey]: '' }));
-        console.log(formValues);
-
-        formObject.validateForm();
     };
 
     /**
@@ -49,7 +46,7 @@ const IntermediateCitiesComponent: React.FC<IntermediateCitiesProps> = props => 
         let { errors } = formObject;
 
         let newInput: Object = (
-            <FormControl key={mapKey} isInvalid={errors[mapKey] !== undefined}>
+            <FormControl isInvalid={errors[mapKey] !== undefined} key={mapKey}>
                 <SearchableDropDownComponent
                     formObject={formObject}
                     formLabel={'Intermediate city'}

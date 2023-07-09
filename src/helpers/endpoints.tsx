@@ -43,7 +43,7 @@ const searchCity = (searchTermn: string): Promise<[]> => {
         setTimeout(() => {
             const failFlag = 'fail';
 
-            if (failFlag === searchTermn) {
+            if (failFlag === searchTermn.toLocaleLowerCase()) {
                 return reject('Failed on purpose');
             }
 

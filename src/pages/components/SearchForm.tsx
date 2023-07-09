@@ -73,44 +73,51 @@ const SearchForm: React.FC<SearchFromProps> = props => {
                 setLoader(true);
                 setFormValues(values);
                 //Submit logic here
-                let parsedCitiesArray: [[string, number, number]] | any = [];
-                document.querySelectorAll('input[data-city-selector]').forEach((el: any) => {
-                    const cityData: CityData = JSON.parse(el.getAttribute('city-data'));
-                    parsedCitiesArray.push([cityData.cityName, cityData.lat, cityData.long]);
-                });
-                calculateDistanceBetweenCities(parsedCitiesArray)
-                    .then(
-                        (result: CalculateDistanceResponse) => {
-                            if (setTotalDistnceResult) {
-                                setBetweenCities(result.segmented);
-                                setTotalDistnceResult(result.total);
+                try {
+                    let parsedCitiesArray: [[string, number, number]] | any = [];
+                    document.querySelectorAll('input[data-city-selector]').forEach((el: any) => {
+                        const cityData: CityData = JSON.parse(el.getAttribute('city-data'));
+                        parsedCitiesArray.push([cityData.cityName, cityData.lat, cityData.long]);
+                    });
+                    calculateDistanceBetweenCities(parsedCitiesArray)
+                        .then(
+                            (result: CalculateDistanceResponse) => {
+                                if (setTotalDistnceResult) {
+                                    setBetweenCities(result.segmented);
+                                    setTotalDistnceResult(result.total);
+                                    setLoader(false);
+                                }
+                            },
+                            reject => {
+                                console.log('reject', reject);
                                 setLoader(false);
-                            }
-                        },
-                        reject => {
-                            console.log('reject', reject);
+                                setShowError(true);
+                            },
+                        )
+                        .catch(err => {
+                            console.log('This error is thrown when calcualtion goes bad', err);
                             setLoader(false);
                             setShowError(true);
-                        },
-                    )
-                    .catch(err => {
-                        console.log('This error is thrown when calcualtion goes bad', err);
-                        setLoader(false);
-                        setShowError(true);
-                    });
-                if (location.pathname.includes('search') === false) {
-                    const parsed: any = {};
-                    Object.keys(values).forEach(current => {
-                        parsed[current] = (values as any)[current];
-                    });
-
-                    parsed.citiesData = parsedCitiesArray;
-
-                    const options = {
-                        pathname: '/search',
-                        search: `?${new URLSearchParams(parsed)}`,
-                    };
-                    navigate(options);
+                        });
+                    if (location.pathname.includes('search') === false) {
+                        const parsed: any = {};
+                        Object.keys(values).forEach(current => {
+                            parsed[current] = (values as any)[current];
+                        });
+    
+                        parsed.citiesData = parsedCitiesArray;
+    
+                        const options = {
+                            pathname: '/search',
+                            search: `?${new URLSearchParams(parsed)}`,
+                        };
+                        navigate(options);
+                    }
+                } catch (error) {
+                    console.log('An error took place', error);
+                    formik.resetForm();
+                    setShowError(true);
+                    setLoader(false);
                 }
             }
         },
@@ -142,7 +149,7 @@ const SearchForm: React.FC<SearchFromProps> = props => {
                     {/* <fieldset disabled={isLoading ? "disabled" : ""} > */}
                     <VStack spacing={4}>
                         {/* Start city destionation input */}
-                        <FormControl isInvalid={convertedErrors?.startCity !== undefined}>
+                        <FormControl isInvalid={convertedErrors?.startCity !== undefined} key={'startCity'}>
                             <SearchableDropDownComponent
                                 formObject={formik}
                                 formLabel={'Start city'}
@@ -168,7 +175,7 @@ const SearchForm: React.FC<SearchFromProps> = props => {
                         {/* End of the dynamically added inputs or in between cities  */}
 
                         {/* Final city destionation input */}
-                        <FormControl isInvalid={convertedErrors?.finalDestination !== undefined}>
+                        <FormControl isInvalid={convertedErrors?.finalDestination !== undefined} key={'finalDestination'}>
                             <SearchableDropDownComponent
                                 formObject={formik}
                                 formLabel={'Destination'}
@@ -183,7 +190,7 @@ const SearchForm: React.FC<SearchFromProps> = props => {
                         {/* Passaengers number input section */}
                         <Stack direction={['column', 'row']} spacing='24px' w='100%'>
                             <Box w='20%'>
-                                <FormControl isInvalid={convertedErrors?.passangers !== undefined}>
+                                <FormControl isInvalid={convertedErrors?.passangers !== undefined} key={'passanger'}>
                                     <FormLabel htmlFor='passanger'>Passangers</FormLabel>
                                     <NumberInput
                                         isInvalid={convertedErrors?.passangers !== undefined}
@@ -206,7 +213,7 @@ const SearchForm: React.FC<SearchFromProps> = props => {
 
                             <Box w='30%'>
                                 {/* DatePicker Here */}
-                                <FormControl isInvalid={convertedErrors?.departureDate !== undefined}>
+                                <FormControl isInvalid={convertedErrors?.departureDate !== undefined} key={'departureDate'}>
                                     <FormLabel htmlFor='departureDate'>Day of travel</FormLabel>
                                     <SingleDatepicker
                                         date={date}
