@@ -1,7 +1,8 @@
-import { Heading, List, ListItem, Text } from '@chakra-ui/react';
+import { Button, Heading, List, ListItem, Text } from '@chakra-ui/react';
 import { IconDefinition, faCar, faEllipsisVertical, faFlagCheckered } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Fragment, ReactNode } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 interface CalculationResultProps {
     results: Array<[string, string, number]>;
@@ -10,6 +11,7 @@ interface CalculationResultProps {
 
 const CalculationResultComponent: React.FC<CalculationResultProps> = props => {
     const { results, totalDistance } = props;
+    const navigate = useNavigate();
     const fetchListIcon = (index: number, listLength: number): IconDefinition => {
         let icon: IconDefinition = faCar;
         switch (index) {
@@ -66,6 +68,13 @@ const CalculationResultComponent: React.FC<CalculationResultProps> = props => {
                 Total distance:{totalDistance} KM
             </Heading>
             <List spacing={3}>{renderResults()}</List>
+            <Button
+                marginTop={'1rem'}
+                colorScheme='teal'
+                onClick={() => navigate('/')}
+                variant='outline'>
+                Go back to serach...
+            </Button>
         </Fragment>
     );
 };

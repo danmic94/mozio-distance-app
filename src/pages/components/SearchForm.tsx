@@ -133,6 +133,7 @@ const SearchForm: React.FC<SearchFromProps> = props => {
         <Fragment>
             <Stack direction='row' spacing={4}>
                 <Button
+                    marginTop={'1rem'}
                     ref={addIntermediateCityButtonRef}
                     rightIcon={<FontAwesomeIcon icon={faCity} />}
                     colorScheme='teal'

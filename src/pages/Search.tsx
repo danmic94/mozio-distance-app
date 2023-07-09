@@ -56,7 +56,7 @@ const SearchPageComponent: React.FC<SearchPageProps> = () => {
             <Center paddingTop={'4rem'}>
                 <Stack direction={['column', 'row']}>
                     <Box>
-                        {!isLoading &&
+                        {!isLoading && betweenCities.length === 0 &&
                             <Fragment>
                                 <ErrorAlertComponent showError={showError} setShowError={setErrorAlertFlag} />
                                 <Alert
@@ -75,7 +75,7 @@ const SearchPageComponent: React.FC<SearchPageProps> = () => {
                                     <AlertDescription maxWidth='md'>
                                         Sorry there was a problem while calculating your requested distance.
                                     </AlertDescription>
-                                    <br/>
+                                    <br />
                                     <Button
                                         colorScheme='teal'
                                         onClick={() => navigate('/')}
